@@ -813,6 +813,19 @@ main.unlock-root { padding: 32px; min-height: 100vh; }
 .unlock-sidebar button.active .unlock-nav-dot { background: #111; }
 .unlock-app-list button { color: #8a857c; cursor: default; }
 .unlock-app-list button:hover { background: transparent; }
+.unlock-app-list a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 12px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 750;
+  color: #5f625f;
+  text-decoration: none;
+  cursor: pointer;
+}
+.unlock-app-list a:hover { background: #f0efeb; color: #111; }
 .unlock-user-chip {
   margin: 24px 12px 0;
   padding: 10px 12px;

@@ -40,7 +40,14 @@ const navItems: { id: ProductPage; label: string }[] = [
   { id: 'tiers', label: 'AI Tiers' },
 ];
 
-const appItems = ['Delight Store', 'GTM', 'External Buzzboard', 'CSM', 'Recruiting', 'PMM'];
+const appItems: { label: string; href?: string }[] = [
+  { label: 'Delight Store' },
+  { label: 'GTM', href: 'https://unifocus-magazine-prototype.vercel.app' },
+  { label: 'External Buzzboard' },
+  { label: 'CSM' },
+  { label: 'Recruiting' },
+  { label: 'PMM' },
+];
 
 const tierFilters: ('All' | QuestKind)[] = ['All', 'Quick', 'Solid', 'Epic'];
 const statusFilters: ('All' | QuestState)[] = ['All', 'Open', 'In Progress', 'Completed'];
@@ -489,13 +496,15 @@ function UnlockProductApp() {
           </nav>
           <p className="unlock-side-section">Apps</p>
           <nav className="unlock-app-list">
-            {appItems.map((label) => (
-              <button key={label} disabled><i className="unlock-nav-dot" />{label}</button>
+            {appItems.map((item) => (
+              item.href
+                ? <a key={item.label} href={item.href} target="_blank" rel="noopener noreferrer"><i className="unlock-nav-dot" />{item.label}</a>
+                : <button key={item.label} disabled><i className="unlock-nav-dot" />{item.label}</button>
             ))}
           </nav>
           <div className="unlock-user-chip">
-            <span>JK</span>
-            <strong>John</strong>
+            <span>AF</span>
+            <strong>Athens</strong>
           </div>
         </aside>
         <section className="unlock-canvas">
