@@ -1,237 +1,28 @@
 import { Fragment, type CSSProperties, type ReactNode, useState } from 'react';
 
-type ProjectCard = {
-  title: string;
-  description: string;
-  status: 'Live' | 'Building' | 'Planning';
-  accent: 'coral' | 'green' | 'navy' | 'purple';
-  mockup?: string;
-  tags: string[];
-};
+type ProductPage = 'quests' | 'quest-detail' | 'skills' | 'plugin-detail' | 'skill-detail' | 'guides' | 'tiers' | 'usage';
 
-type ProjectGroup = {
-  number: string;
-  title: string;
-  summary: string;
-  cards: ProjectCard[];
-};
-
-type Campaign = {
-  title: string;
-  status: 'Live' | 'Coming Soon';
-  description: string;
-  date: string;
-};
-
-type PostTemplate = {
-  id: string;
-  tone: string;
-  title: string;
-  body: string;
-  recommended?: boolean;
-};
-
-type BillboardAsset = {
-  label: string;
-  badge: 'REAL' | 'AI';
-  scene: 'cover' | 'spread' | 'lobby' | 'suite' | 'column' | 'feature';
-};
-
-const projectGroups: ProjectGroup[] = [
-  {
-    number: '02',
-    title: 'Account-Based Marketing',
-    summary: 'Campaigns and tools to improve ABM efficiency — from account selection to activation.',
-    cards: [
-      {
-        title: 'Events × ABM Matchrate',
-        description: 'Upload event lists and identify how many ABM target accounts are represented.',
-        status: 'Live',
-        accent: 'purple',
-        mockup: 'Matchrate',
-        tags: ['events', 'matching', 'ICP'],
-      },
-      {
-        title: 'ABM Geo Location Intelligence',
-        description: 'Map account concentration to inform event targeting and regional campaign bets.',
-        status: 'Live',
-        accent: 'green',
-        mockup: 'Geo Intel',
-        tags: ['map', 'territory', 'planning'],
-      },
-      {
-        title: 'ABM Intent Scoring',
-        description: 'Track intent signals over time and surface top accounts for weekly GTM focus.',
-        status: 'Live',
-        accent: 'coral',
-        mockup: 'Intent Score',
-        tags: ['signals', 'scoring', 'ABM'],
-      },
-    ],
-  },
-  {
-    number: '03',
-    title: 'Project: Gravity Lab',
-    summary: 'Increase top-of-funnel website conversion — right traffic in, more conversions out.',
-    cards: [
-      {
-        title: 'Competitor LP Conversion Report',
-        description: 'Analyse competitor landing pages, messaging, offers, and conversion patterns.',
-        status: 'Live',
-        accent: 'coral',
-        mockup: 'Competitor LP Review',
-        tags: ['performance', 'landing pages', 'copy'],
-      },
-      {
-        title: 'LP Scoreboard',
-        description: 'Score page strength and surface the highest-impact changes to improve conversion.',
-        status: 'Building',
-        accent: 'green',
-        mockup: 'LP Scoreboard',
-        tags: ['scoring', 'CRO', 'testing'],
-      },
-      {
-        title: 'Fan Page Experiment Brief',
-        description: 'Create a brief for fan-page style messaging, channel tests, and social proof loops.',
-        status: 'Live',
-        accent: 'navy',
-        mockup: 'Fan Page Messaging',
-        tags: ['brief', 'messaging', 'experiment'],
-      },
-      {
-        title: 'Paid Social Mockups',
-        description: 'Generate visual mockups for paid social variants across LinkedIn and display.',
-        status: 'Live',
-        accent: 'purple',
-        mockup: 'Paid Social Mockup',
-        tags: ['paid social', 'mockups', 'creative'],
-      },
-    ],
-  },
-  {
-    number: '04',
-    title: 'Project: Purple Cow',
-    summary: 'Creative campaign experiments designed to be noticed, shared, and remembered.',
-    cards: [
-      {
-        title: 'AaaS Experiment Pilot Results',
-        description: 'Review campaign learnings, traction, and qualitative reactions from early pilots.',
-        status: 'Live',
-        accent: 'navy',
-        mockup: 'Pilot Results',
-        tags: ['results', 'campaign', 'learning'],
-      },
-      {
-        title: 'Design Planning — Creative Brief',
-        description: 'Shape the creative direction, hook, format, and asset requirements for launch.',
-        status: 'Planning',
-        accent: 'green',
-        mockup: 'Creative Brief',
-        tags: ['design', 'brief', 'planning'],
-      },
-      {
-        title: 'AaaS Billboard Builder',
-        description: 'Assemble billboard concepts with approved copy, layout, and campaign visuals.',
-        status: 'Live',
-        accent: 'coral',
-        mockup: 'Billboard Builder',
-        tags: ['billboard', 'AaaS', 'creative'],
-      },
-      {
-        title: 'Purple Cow Idea Pitch',
-        description: 'Package unusual ideas into a crisp pitch that explains why they will travel.',
-        status: 'Live',
-        accent: 'purple',
-        mockup: 'Idea Pitch',
-        tags: ['pitch', 'strategy', 'viral'],
-      },
-    ],
-  },
-];
-
-const harperCards: ProjectCard[] = [
-  {
-    title: 'Harper Optimization Hub',
-    description: 'Review inbound prompts, routing, conversion paths, and channel-specific agent behaviour.',
-    status: 'Live',
-    accent: 'purple',
-    mockup: 'Optimization Hub',
-    tags: ['agent', 'conversion', 'prompting'],
-  },
-  {
-    title: 'Harper Preview Testing',
-    description: 'Test Harper against landing page previews before campaigns go live.',
-    status: 'Live',
-    accent: 'purple',
-    mockup: 'Preview Testing',
-    tags: ['preview', 'QA', 'campaigns'],
-  },
-];
-
-const campaigns: Campaign[] = [
-  {
-    title: 'UniFocus Magazine Ad Kit',
-    status: 'Live',
-    description: 'Amplify the UniFocus hospitality AI magazine campaign across LinkedIn.',
-    date: 'May 7, 2026',
-  },
-  {
-    title: 'Hotel Ops AI Launch Kit',
-    status: 'Live',
-    description: 'Share approved hotel operations messaging for workforce, scheduling, and service teams.',
-    date: 'May 3, 2026',
-  },
-  {
-    title: "How I AI — John's Episode",
-    status: 'Coming Soon',
-    description: 'Something exciting is coming up — watch this space.',
-    date: 'Launching soon',
-  },
-];
-
-function createPostTemplates(slogan: string): PostTemplate[] {
-  return [
-    {
-      id: 'playful',
-      tone: 'Playful',
-      title: 'Hotel ops waits for no one.',
-      body: `${slogan}\n\nHotels do not get to pause while teams catch up. Guests arrive, shifts change, rooms turn over, and service expectations keep climbing.\n\nThat is why UniFocus is putting AI to work where hospitality moves fastest.\n\n#HospitalityAI #HotelOperations #UniFocus`,
-    },
-    {
-      id: 'spotted',
-      tone: 'Spotted',
-      title: 'Seen this one yet?',
-      recommended: true,
-      body: `Seen this campaign?\n\n“${slogan}”\n\nA neat little reminder that hotel operations need technology that can keep up with the pace of the floor, the desk, and the guest.\n\nUniFocus helps hospitality teams move faster with smarter workforce and operations intelligence.\n\n#HospitalityTech #HotelAI #WorkforceManagement`,
-    },
-    {
-      id: 'bold',
-      tone: 'Bold',
-      title: 'The pace of hospitality changed.',
-      body: `${slogan}\n\nThe best hotel teams already move quickly. The opportunity now is giving them AI that moves with them — across labour planning, forecasting, service execution, and daily operational decisions.\n\nThat is the campaign. That is the point.\n\n#Hotels #HospitalityAI #UniFocus`,
-    },
-  ];
-}
-
-const assets: BillboardAsset[] = [
-  { label: 'Trade cover', badge: 'REAL', scene: 'cover' },
-  { label: 'Hotelier spread', badge: 'REAL', scene: 'spread' },
-  { label: 'Lobby feature', badge: 'REAL', scene: 'lobby' },
-  { label: 'Suite insert', badge: 'REAL', scene: 'suite' },
-  { label: 'Column ad', badge: 'AI', scene: 'column' },
-  { label: 'Feature page', badge: 'AI', scene: 'feature' },
-];
-const pastCampaigns = ['Hospitality Staffing Trends', 'Forecasting Playbook Drop', 'Operations AI Teaser', 'Guest Service Readiness 101'];
-const sloganIdeas = ['Hotels Move Fast. Our AI Moves Faster.', 'Smarter Shifts. Happier Guests.', 'Forecast Demand Before It Hits the Lobby.'];
-
-type ProductPage = 'quests' | 'quest-detail' | 'skills' | 'skill-detail' | 'guides' | 'tiers' | 'usage';
+type QuestKind = 'Quick' | 'Solid' | 'Epic';
+type QuestState = 'Open' | 'In Progress' | 'Completed';
 
 type QuestCard = {
   title: string;
   description: string;
-  status: 'Active' | 'Completed' | 'In Review';
-  tier: 'Tier 01' | 'Tier 02' | 'Tier 03' | 'Tier 04';
-  meta: string;
+  kind: QuestKind;
+  state: QuestState;
+  stripe: 'amber' | 'green' | 'yellow' | 'coral' | 'violet';
+  author: string;
+  posted: string;
+  builders: number;
+  verified?: boolean;
+  hrsSaved?: string;
+  team?: string;
+  risk?: 'LOW' | 'MEDIUM' | 'HIGH';
+  questGiver?: { initial: string; mask: string; color: string };
+  buildersList?: { initial: string; mask: string; color: string }[];
+  completedBy?: { initial: string; mask: string; color: string };
+  hero?: 'demo' | 'plain';
+  body?: string[];
 };
 
 type SkillCard = {
@@ -249,95 +40,305 @@ const navItems: { id: ProductPage; label: string }[] = [
   { id: 'tiers', label: 'AI Tiers' },
 ];
 
+const appItems = ['Delight Store', 'GTM', 'External Buzzboard', 'CSM', 'Recruiting', 'PMM'];
+
+const tierFilters: ('All' | QuestKind)[] = ['All', 'Quick', 'Solid', 'Epic'];
+const statusFilters: ('All' | QuestState)[] = ['All', 'Open', 'In Progress', 'Completed'];
+
 const activeQuests: QuestCard[] = [
   {
     title: 'Salesforce Opps & Files Quick-Links per Customer on CSM Dashboard',
-    description: 'Give CSMs customer-specific Salesforce opportunities and file links directly from their dashboard.',
-    status: 'Active',
-    tier: 'Tier 02',
-    meta: 'Customer Success · SFDC',
+    description: 'Customer Success Managers (CSMs) use a shared dashboard (https://csm-reach-...',
+    kind: 'Solid',
+    state: 'In Progress',
+    stripe: 'amber',
+    author: 'L***',
+    posted: '18h ago',
+    builders: 1,
+    hrsSaved: '9.3 hrs/wk saved',
+    team: 'Customer Success (CSM)',
+    risk: 'LOW',
+    questGiver: { initial: 'L', mask: 'L***', color: '#e89b3a' },
+    body: [
+      'Customer Success Managers (CSMs) use a shared dashboard (https://csm-reach-dashboard.vercel.app/) as their central hub for managing customer accounts. Currently, when a CSM needs to reference a Salesforce Opportunity or an uploaded file for a customer, they must manually log into Salesforce, navigate to the account, browse the list of Opportunities, identify the most recent Closed Won deal, and then search through file attachments — which may be buried in older Opportunities rather than the most recent one. This multi-step process is repeated daily across all 8 CSMs (3 US, 1 EMEA, 4 APAC/SACA) and takes between 5-15 minutes per lookup.',
+      'The goal of this quest is to surface per-customer Salesforce Opportunity and File links directly on the CSM dashboard, so that CSMs can click through to the right Salesforce record instantly without leaving the hub. The dashboard already integrates with external APIs (e.g. Gmail, Gong), and Salesforce connectivity will need to be added via API. The builder will need to investigate the existing API architecture and extend it to support Salesforce data.',
+      '**Follow-up Quests:**',
+      'The following ideas were captured from the original brain dump and are strong candidates for future quests:',
+      '- **Gainsight C360 quick-links** — per-customer links to Gainsight Customer 360 profiles',
+      '- **Slack channel links** — surfacing the relevant Slack channel(s) per customer',
+      '- **Recurring calendar meeting links** — linking to recurring meetings associated with each customer',
+      '- **Insight links** — per-customer links to Insight',
+      '- **Recent Gong calls** — surfacing recent Gong call recordings with click-through access to clips and insights',
+      '## Success Criteria',
+      'A CSM can open the dashboard, navigate to any customer, and click directly into the relevant Salesforce Opportunity and any associated files — without logging into Salesforce separately or manually searching. Time to access Salesforce files drops from 5-15 minutes to under 30 seconds.',
+    ],
   },
   {
     title: 'Self-Serve Staging Environment for Harper AI SDR Testing',
-    description: 'Let teams test Harper SDR behaviour safely against realistic preview experiences.',
-    status: 'Active',
-    tier: 'Tier 03',
-    meta: 'Sales · Harper',
+    description: 'The Delight product team uses an AI-powered chat agent called Harper, built on Delight.ai\'s platform...',
+    kind: 'Quick',
+    state: 'Open',
+    stripe: 'green',
+    author: 'A***',
+    posted: '13h ago',
+    builders: 1,
   },
   {
     title: 'Campaign Asset Accelerator',
-    description: 'Generate reusable campaign assets from approved messaging, templates, and creative direction.',
-    status: 'Active',
-    tier: 'Tier 02',
-    meta: 'Marketing · Assets',
+    description: 'The Campaign Asset Accelerator is a self-serve platform for Demand Gen and PMM (20–30 users) t...',
+    kind: 'Epic',
+    state: 'In Progress',
+    stripe: 'yellow',
+    author: 'A***',
+    posted: '14h ago',
+    builders: 1,
   },
   {
     title: 'Reliable LinkedIn Recruiter Profile Collection Beyond the 25-Profile Cap',
-    description: 'Collect recruiting profile data reliably beyond manual list limits and brittle scraping.',
-    status: 'In Review',
-    tier: 'Tier 03',
-    meta: 'Recruiting · LinkedIn',
+    description: 'Who uses it: A recruiter at Delight.ai (with potential applicability to Sales Navigator users) who sources...',
+    kind: 'Solid',
+    state: 'Open',
+    stripe: 'green',
+    author: 'P***',
+    posted: '17h ago',
+    builders: 1,
   },
   {
     title: 'AI-Powered Daily Prioritization Engine for AEs',
-    description: 'Rank accounts, opportunities, and next actions so reps start the day with focus.',
-    status: 'Active',
-    tier: 'Tier 02',
-    meta: 'Sales · Prioritisation',
+    description: 'The Sales team (20 AEs and managers) currently has no consistent process for prioritizing their daily...',
+    kind: 'Solid',
+    state: 'Open',
+    stripe: 'amber',
+    author: 'H***',
+    posted: '20h ago',
+    builders: 1,
   },
   {
     title: 'Sales Rep Performance Scorecard — Reliable Salesforce Data Pipeline',
-    description: 'Build a dependable SFDC-backed scorecard for rep performance and coaching conversations.',
-    status: 'Active',
-    tier: 'Tier 03',
-    meta: 'Sales Ops · Data',
+    description: 'The Sales team relies on a daily Google Sheets scorecard to track rep effectiveness across four ke...',
+    kind: 'Solid',
+    state: 'In Progress',
+    stripe: 'amber',
+    author: 'H***',
+    posted: '20h ago',
+    builders: 1,
   },
   {
     title: 'Deal Desk Opportunity Audit Agent — Auto-Review & Triage Contracts in SFDC + Google Drive',
-    description: 'Review deal desk opportunities and related contract files before escalation.',
-    status: 'Active',
-    tier: 'Tier 04',
-    meta: 'Deal Desk · Audit',
+    description: 'The Deal Desk team manually audits deals before...',
+    kind: 'Epic',
+    state: 'In Progress',
+    stripe: 'yellow',
+    author: 'M***',
+    posted: '22h ago',
+    builders: 1,
   },
   {
     title: 'Sales QBR Consolidated Dashboard — Salesforce, Gong & Salesloft',
-    description: 'Combine core GTM systems into one QBR-ready view for sales leadership.',
-    status: 'Active',
-    tier: 'Tier 03',
-    meta: 'Sales · QBR',
+    description: 'The Sales team (15 reps) currently prepares for...',
+    kind: 'Epic',
+    state: 'In Progress',
+    stripe: 'yellow',
+    author: 'R***',
+    posted: '22h ago',
+    builders: 1,
   },
   {
     title: 'AI-Powered Deal Room Generator for Sales',
-    description: 'Create deal-room pages that pull together context, files, risks, and next steps.',
-    status: 'Active',
-    tier: 'Tier 03',
-    meta: 'Sales · Deal Room',
+    description: 'Sales reps at a 15-person sales team currently have no centralized, personalized way to engage buyers...',
+    kind: 'Epic',
+    state: 'Open',
+    stripe: 'yellow',
+    author: 'R***',
+    posted: '23h ago',
+    builders: 1,
   },
 ];
 
 const completedQuests: QuestCard[] = [
   {
-    title: 'Customer Account Lookup Using GPT Workflow Automation',
-    description: 'A completed workflow for retrieving customer account context from internal systems.',
-    status: 'Completed',
-    tier: 'Tier 02',
-    meta: 'Completed · Customer Success',
+    title: 'Customer Account Lookup — GPT + n8n Workflow Pulling Live Salesforce Data',
+    description: 'Sales, AE, CSM, and RM teams (15 people total) frequently need to look up customer account...',
+    kind: 'Solid',
+    state: 'Completed',
+    stripe: 'amber',
+    author: 'G***',
+    posted: '4/7/2026',
+    builders: 2,
+    hero: 'demo',
+    hrsSaved: '12.5 hrs/wk saved',
+    team: 'Sales, AE, CSM, RM',
+    risk: 'MEDIUM',
+    questGiver: { initial: 'G', mask: 'G***', color: '#e89b3a' },
+    buildersList: [
+      { initial: 'I', mask: 'I***', color: '#e0533f' },
+      { initial: 'G', mask: 'G***', color: '#e89b3a' },
+    ],
+    completedBy: { initial: 'I', mask: 'I***', color: '#e0533f' },
+    body: [
+      'Sales, AE, CSM, and RM teams (15 people total) frequently need to look up customer account information before calls, renewals, or internal reviews. Today, pulling together a full account picture requires jumping across multiple platforms — Salesforce, Insight, Gmail, and Slack — and takes an average of 10 minutes per lookup, happening 5-10 times per week per person.',
+      'The goal of Version 1 is to create a seamless workflow where any employee types a customer name into a GPT interface, which triggers an n8n workflow that queries Salesforce and returns a structured account summary including: account name, ARR, renewal date, Insight link, open opportunities, and contracts — all in one response.',
+      'The n8n-to-Salesforce API connection already exists, so the build focuses on wiring the GPT interface to n8n and mapping the correct Salesforce fields into a clean, readable output. https://chatgpt.com/g/g-69c43472681c8191a2814fbe736df9fc-customer-lookup-salesforce',
+      '**Follow-up Quests:**',
+      '- Version 2: Add Big query for usage data',
+      '- Version 3: Expand the lookup to parse contracts stored in Google Drive and surface out-of-box features enabled for the account',
+      '- Version 4: Flag waivers granted to customers by scanning contracts, Gmail threads, and Slack channels tied to the account',
+      '## Success Criteria',
+      'Any of the 10 users can type a customer name into the GPT, and within seconds receive an accurate, complete account summary (account name, ARR, renewal date, Insight link, opps, contracts) pulled live from Salesforce — with no manual platform-hopping required.',
+    ],
   },
   {
-    title: 'Monthly Operating Metrics Automation',
-    description: 'Automated monthly operating metrics preparation for repeatable leadership updates.',
-    status: 'Completed',
-    tier: 'Tier 03',
-    meta: 'Completed · Ops',
+    title: 'Internal Skill Publishing & Discovery Marketplace for Sendbird',
+    description: 'Currently, ~20 Sendbird employees are building skills on the Automators platform, but there is no...',
+    kind: 'Epic',
+    state: 'Completed',
+    stripe: 'yellow',
+    author: 'I***',
+    posted: '3/10/2026',
+    builders: 1,
+    verified: true,
+    hero: 'plain',
+    hrsSaved: '1.0 hrs/wk saved',
+    team: 'All Sendbird Employees',
+    risk: 'LOW',
+    questGiver: { initial: 'I', mask: 'I***', color: '#e0533f' },
+    buildersList: [{ initial: 'I', mask: 'I***', color: '#e0533f' }],
+    body: [
+      "Currently, ~20 Sendbird employees are building skills on the Automators platform, but there is no centralized way to share, discover, or reuse them. Skills are siloed to the individual who built them, and the only way to share a skill today is informally — taking roughly 3 minutes per share and happening about once a week per person. There is no process, no catalog, and no visibility into what's already been built.",
+      "The goal of this quest is to build an internal skill marketplace on the Automators platform where any Sendbird employee can publish a skill they've built and any other employee can browse, discover, and use those skills — all authenticated via SSO. This removes the silo problem entirely and unlocks reuse across the company.",
+      '**Follow-up Quests:**',
+      '- Usage analytics dashboard showing how often each skill is being used',
+      '- In-marketplace chat interface to interact with skills directly',
+      '## Success Criteria',
+      "Any Sendbird employee can find and deploy a published skill in under 5 minutes, with no manual coordination with the skill's original author.",
+      '## Follow-up Quests',
+      '- Usage Analytics Quest — build a dashboard showing skill usage frequency, top skills, and adoption trends across the company',
+      '- In-Marketplace Chat Quest — add a chat interface so employees can interact with and test skills before installing',
+    ],
   },
   {
-    title: 'AI-Powered Content Writing Workflow',
-    description: 'Reusable writing workflow for content briefs, drafts, and review-ready outputs.',
-    status: 'Completed',
-    tier: 'Tier 02',
-    meta: 'Completed · Marketing',
+    title: 'Buzz Board: LLM-Powered LinkedIn Post Creation for Employee Advocacy',
+    description: 'Buzz Board is an internal employee advocacy app designed to drive organic LinkedIn engagement...',
+    kind: 'Epic',
+    state: 'Completed',
+    stripe: 'yellow',
+    author: 'A***',
+    posted: '14h ago',
+    builders: 1,
+  },
+  {
+    title: 'ABM Field Event Planner — Interactive Contact Density Map',
+    description: 'The PMM, Demand Gen, and Marketing Leadership teams (8-10 people) need a way to visually identify...',
+    kind: 'Solid',
+    state: 'Completed',
+    stripe: 'amber',
+    author: 'A***',
+    posted: '14h ago',
+    builders: 1,
+  },
+  {
+    title: 'ABM Match Rate Dashboard for Event Sponsorship Evaluation',
+    description: 'The Demand Gen, Field Events, and PMM teams (3-5 people) need to evaluate whether conferences an...',
+    kind: 'Solid',
+    state: 'Completed',
+    stripe: 'green',
+    author: 'A***',
+    posted: '14h ago',
+    builders: 1,
+  },
+  {
+    title: 'Full Automation of Monthly Operating Metrics Google Sheet Update',
+    description: "Each month, 3 people spend approximately 1 hour each updating Sendbird's Monthly Operating...",
+    kind: 'Solid',
+    state: 'Completed',
+    stripe: 'amber',
+    author: 'J***',
+    posted: '20h ago',
+    builders: 1,
+  },
+  {
+    title: 'Delight AI Agent Feature Flag 자동 수집 · 메모리 시스템 구축',
+    description: '배경 및 문제: Delight AI Agent 팀(QE, FDT, PM, Client, Server 등 약 20-30명)은 feature flag의 현재 상태를 파...',
+    kind: 'Epic',
+    state: 'Completed',
+    stripe: 'yellow',
+    author: 'A***',
+    posted: '1d ago',
+    builders: 1,
+  },
+  {
+    title: 'AI Content Wizard - Blog and page writing',
+    description: 'Who uses it: Content/SEO, PMM, Web Strategy, and Web/Dev teams producing blog and article content...',
+    kind: 'Epic',
+    state: 'Completed',
+    stripe: 'yellow',
+    author: 'M***',
+    posted: '1d ago',
+    builders: 1,
+  },
+  {
+    title: 'Figma-to-CMS Automation: AI-Powered Landing Page Assembly & Publish Pipeline',
+    description: 'Who uses it: Design, Web, PMM, and Demand Gen teams (10+ people) involved in the end-to-end...',
+    kind: 'Epic',
+    state: 'Completed',
+    stripe: 'yellow',
+    author: 'D***',
+    posted: '2d ago',
+    builders: 1,
   },
 ];
+
+type PluginCard = { name: string; description: string; badgeLetter: string; badgeColor: 'coral' | 'green' | 'violet' | 'amber'; skillCount: number };
+
+const pluginCards: PluginCard[] = [
+  { name: 'sales-skills', description: 'AI-powered sales skills for the Sendbird sales team', badgeLetter: 'S', badgeColor: 'coral', skillCount: 12 },
+  { name: 'vercel-dev-skills', description: 'AI-powered development skills for Vercel app teams — project setup, spec drafting, Linear tickets, PR shipping, and...', badgeLetter: 'V', badgeColor: 'coral', skillCount: 5 },
+  { name: 'recruiting', description: 'AI-powered recruiting tools for sourcing, screening, and scheduling candidates', badgeLetter: 'R', badgeColor: 'green', skillCount: 8 },
+  { name: 'customer-success', description: 'Customer health scoring, QBR prep, and renewal automation for CS teams', badgeLetter: 'C', badgeColor: 'green', skillCount: 12 },
+  { name: 'forward-deployed', description: 'Implementation and onboarding tools for forward-deployed engineers', badgeLetter: 'F', badgeColor: 'amber', skillCount: 6 },
+  { name: 'design', description: 'Design workflow automation for Figma handoffs, asset management, and feedback loops', badgeLetter: 'D', badgeColor: 'violet', skillCount: 5 },
+  { name: 'demand-gen', description: 'Demand generation automation for campaigns, lead scoring, and pipeline reports', badgeLetter: 'D', badgeColor: 'violet', skillCount: 9 },
+  { name: 'product-marketing', description: 'Product positioning, competitive intel, and launch playbook automation', badgeLetter: 'P', badgeColor: 'green', skillCount: 7 },
+];
+
+const skillTags = ['linkedin', 'outbound', 'web-design', 'landing-page', 'design-system', 'slide', 'design', 'deck', 'tse', 'internal guide', 'documentation', 'support'];
+
+type SalesSkill = { name: string; desc: string; up: number; down: number };
+const salesSkills: SalesSkill[] = [
+  { name: 'cold email', desc: 'When the user wants to write a cold outreach email or prospecting email to a...', up: 4, down: 72 },
+  { name: 'rooster open call kit', desc: 'When the user wants to prepare for a cold call, generate a cold call script, practice...', up: 12, down: 67 },
+  { name: 'discovery questions', desc: 'When the user wants help preparing discovery questions for a prospect call or...', up: 9, down: 64 },
+  { name: 'abm cadence drafter', desc: 'When the user wants to build an ABM outbound cadence, draft a Salesloft...', up: 17, down: 15 },
+  { name: 'call summary', desc: 'When the user wants to summarize a sales call, discovery call, or customer meeting...', up: 8, down: 70 },
+  { name: 'signal scout', desc: 'When the user pastes an account list, uploads a CSV, or asks to scan accounts...', up: 1, down: 20 },
+  { name: 'owl intel scout', desc: 'When the user wants to research a company before a sales call, generate a...', up: 10, down: 40 },
+  { name: 'falcon follow up', desc: 'When the user pastes a meeting transcript, call notes, or call summary and asks for a...', up: 18, down: 19 },
+  { name: 'follow up email', desc: 'When the user wants to write a follow-up email after a sales call, demo, or meeting...', up: 6, down: 34 },
+  { name: 'harrier discovery coach', desc: 'When the user pastes a Gong call transcript or call notes and asks for a call...', up: 5, down: 55 },
+  { name: 'meddpicc advisor', desc: 'When the user asks about MEDDPICC — including how it works, how to apply it to...', up: 1, down: 60 },
+  { name: 'objection handler', desc: 'When the user shares a sales objection they received from a prospect and wants...', up: 6, down: 22 },
+];
+
+const meddpiccDescription = "When the user asks about MEDDPICC — including how it works, how to apply it to a deal, what questions to ask, whether a deal is qualified, how to find a champion, or how to validate any MEDDPICC element. Also triggers when the user pastes call notes or a transcript and asks for MEDDPICC analysis, or says 'review my deal', 'score my deal', or 'what am I missing in this deal'.";
+
+const meddpiccSkillMd = `You are SBSales MEDDPICC Master Advisor — Sendbird's deal qualification coach. You teach MEDDPICC, help reps apply it to live deals, validate whether criteria have been met, extract MEDDPICC elements from call transcripts, and guide reps on what to do next in each deal stage.
+
+**Only give guidance based on MEDDPICC (the full 8-element version).** Do not reference MEDDIC or MEDDICC variants.
+
+---
+
+## What You Can Do
+
+1. **Teach MEDDPICC** — explain any element, its definition, and why it matters
+2. **Give discovery questions** — per letter, per stage, per persona
+3. **Validate deal qualification** — assess whether a rep has met criteria for any element or stage
+4. **Extract MEDDPICC from calls** — when a rep pastes a transcript or call notes, fill in what's been discovered and flag what's missing
+5. **Score deals** — tell the rep where they stand and what's the highest-priority gap
+6. **Coach on next steps** — specific actions to advance the deal for each letter
+
+---
+
+## How to Respond`;
 
 const marketplaceSkills: SkillCard[] = [
   { name: 'meddpicc advisor', description: 'Sales qualification advisor for MEDDPICC deal thinking and risk review.', category: 'Sales', tags: ['sales', 'qualification', 'plugin'] },
@@ -346,8 +347,6 @@ const marketplaceSkills: SkillCard[] = [
   { name: 'csm account brief', description: 'Customer-success account briefing template for preparing account reviews.', category: 'Customer Success', tags: ['csm', 'accounts'] },
   { name: 'fd implementation planner', description: 'Forward-deployed implementation planning workflow for customer rollouts.', category: 'Forward-Deployed', tags: ['implementation'] },
   { name: 'design critique pass', description: 'Product-design critique helper for hierarchy, spacing, and visual consistency.', category: 'Design', tags: ['design', 'qa'] },
-  { name: 'demand gen brief', description: 'Campaign brief generator for demand generation assets and launch plans.', category: 'Demand Generation', tags: ['campaigns'] },
-  { name: 'pm messaging sharpener', description: 'Product-marketing prompt set for positioning, messaging, and launch copy.', category: 'Product Marketing', tags: ['messaging'] },
 ];
 
 const tierRows = [
@@ -388,61 +387,128 @@ const tierRows = [
   },
 ];
 
-const usageDonuts = [
-  { label: 'Beginner', value: 18, colour: '#d9ff72', caption: '<1M tokens/day' },
-  { label: 'Intermediate', value: 46, colour: '#111111', caption: '1-10M tokens/day' },
-  { label: 'Expert+', value: 36, colour: '#8f7cf6', caption: '10M+ tokens/day' },
+type TopBuilder = { mask: string; cc: number; codex: number };
+const topBuilders: TopBuilder[] = [
+  { mask: 'H**** ***', cc: 8.5, codex: 25.0 },
+  { mask: 'E*** ***', cc: 16.7, codex: 0.3 },
+  { mask: 'J** **', cc: 6.0, codex: 10.2 },
+  { mask: 'N***** ***', cc: 9.8, codex: 5.1 },
+  { mask: 'D***** ***', cc: 11.4, codex: 2.2 },
+  { mask: 'G**** *****', cc: 11.0, codex: 2.2 },
+  { mask: 'L**** ***', cc: 7.6, codex: 3.6 },
+  { mask: 'I**** ***', cc: 3.5, codex: 5.9 },
+  { mask: 'M*** ****', cc: 6.0, codex: 2.3 },
+  { mask: 'M****** ***', cc: 6.2, codex: 1.9 },
+  { mask: 'A****** ***', cc: 4.8, codex: 3.2 },
+  { mask: 'J***** ***', cc: 3.5, codex: 3.7 },
+  { mask: 'A**** ***', cc: 3.0, codex: 3.6 },
 ];
 
-const usageLeaders = [
-  ['John Kim', 'CEO', '128M', 'AI God'],
-  ['Claire Vo', 'Product', '86M', 'Catalyst'],
-  ['Maya Patel', 'Marketing', '54M', 'Architect'],
-  ['Avery Chen', 'Engineering', '42M', 'Architect'],
-  ['Jordan Lee', 'Sales', '31M', 'Accelerator'],
+type DirectReport = { mask: string; tokens: string; activeDays: number };
+const directReports: DirectReport[] = [
+  { mask: 'H**** ***', tokens: '33.5B', activeDays: 28 },
+  { mask: 'E*** ***', tokens: '17.0B', activeDays: 25 },
+  { mask: 'J** **', tokens: '16.2B', activeDays: 31 },
+  { mask: 'N***** ***', tokens: '14.9B', activeDays: 28 },
+  { mask: 'D***** ***', tokens: '13.6B', activeDays: 29 },
+  { mask: 'G**** *****', tokens: '13.2B', activeDays: 29 },
+  { mask: 'L**** ***', tokens: '11.2B', activeDays: 29 },
+  { mask: 'I**** ***', tokens: '9.4B', activeDays: 27 },
+  { mask: 'M*** ****', tokens: '8.3B', activeDays: 27 },
+  { mask: 'M****** ***', tokens: '8.1B', activeDays: 24 },
+  { mask: 'A****** ***', tokens: '8.0B', activeDays: 29 },
 ];
 
-const teamUsage: [string, number][] = [
-  ['Engineering', 88],
-  ['Product', 73],
-  ['Marketing', 61],
-  ['Sales / GTM', 54],
-  ['Ops / CoS', 42],
+type LeaderRow = { rank: number; mask: string; tier: string; tokens: string; barFill: number };
+const ccLeaders: LeaderRow[] = [
+  { rank: 4, mask: 'N**** ***', tier: 'AI God', tokens: '14.1B', barFill: 88 },
+  { rank: 5, mask: 'D***** ***', tier: 'AI God', tokens: '13.6B', barFill: 80 },
+  { rank: 6, mask: 'G**** *****', tier: 'AI God', tokens: '13.2B', barFill: 77 },
+  { rank: 7, mask: 'L**** ***', tier: 'AI God', tokens: '11.2B', barFill: 66 },
+  { rank: 8, mask: 'I**** ***', tier: 'AI God', tokens: '9.4B', barFill: 56 },
+  { rank: 9, mask: 'M*** ****', tier: 'AI God', tokens: '8.3B', barFill: 49 },
+  { rank: 10, mask: 'M****** ***', tier: 'AI God', tokens: '8.1B', barFill: 48 },
+  { rank: 11, mask: 'A****** ***', tier: 'AI God', tokens: '8.0B', barFill: 47 },
+  { rank: 12, mask: 'J***** ***', tier: 'AI God', tokens: '6.9B', barFill: 42 },
+];
+const codexLeaders: LeaderRow[] = [
+  { rank: 4, mask: 'L**** ***', tier: 'AI God', tokens: '10.8B', barFill: 90 },
+  { rank: 5, mask: 'N***** ***', tier: 'AI God', tokens: '10.7B', barFill: 89 },
+  { rank: 6, mask: 'M*** ****', tier: 'AI God', tokens: '7.8B', barFill: 65 },
+  { rank: 7, mask: 'J**** ****', tier: 'AI God', tokens: '5.7B', barFill: 47 },
+  { rank: 8, mask: 'D**** *****', tier: 'AI God', tokens: '5.4B', barFill: 45 },
+  { rank: 9, mask: 'A**** ***', tier: 'AI God', tokens: '5.0B', barFill: 42 },
+  { rank: 10, mask: 'D**** ***', tier: 'AI God', tokens: '4.4B', barFill: 37 },
+  { rank: 11, mask: 'I***** ******', tier: 'AI God', tokens: '4.1B', barFill: 34 },
+  { rank: 12, mask: 'J*** ****', tier: 'AI God', tokens: '4.0B', barFill: 33 },
 ];
 
-function App() {
-  return <UnlockProductApp />;
-}
+// Daily token trend — 31 daily points Mar 24 (Wed) → Apr 23 (Fri).
+// Weekends (Sat/Sun) intentionally dip to highlight that AI usage still
+// tracks human office hours rather than running continuously through agents.
+const trendDisplayLabels = ['Mar 24', 'Mar 27', 'Mar 30', 'Apr 2', 'Apr 5', 'Apr 8', 'Apr 11', 'Apr 14', 'Apr 17', 'Apr 20', 'Apr 23'];
+const ccTrend = [
+  9.0, 10.5, 11.0,  5.5,  4.8, 10.0, 11.5,    // Mar 24-30
+  12.0, 12.5, 12.0,  5.8,  5.0, 11.5, 12.5,    // Mar 31-Apr 6
+  13.0, 13.5, 13.0,  6.5,  5.5, 12.5, 13.5,    // Apr 7-13
+  14.0, 14.5, 14.0,  7.0,  6.0, 13.5, 15.0,    // Apr 14-20
+  16.0, 16.5, 15.0,                            // Apr 21-23
+];
+const codexTrend = [
+  4.5,  5.5,  6.0,  2.5,  2.0,  5.5,  6.5,
+  7.0,  7.5,  8.0,  3.0,  2.5,  7.5,  8.5,
+  9.0,  9.5, 10.0,  4.0,  3.5,  9.5, 10.5,
+ 11.0, 11.5, 11.0,  4.5,  4.0, 11.0, 12.5,
+ 13.0, 13.5, 12.0,
+];
+
+type QuestRef = { list: 'active' | 'completed'; idx: number };
 
 function UnlockProductApp() {
   const [activePage, setActivePage] = useState<ProductPage>('quests');
   const [questFilter, setQuestFilter] = useState<'active' | 'completed'>('active');
   const [tierTab, setTierTab] = useState<'tiers' | 'arc' | 'team'>('tiers');
+  const [selectedQuest, setSelectedQuest] = useState<QuestRef>({ list: 'active', idx: 0 });
 
   return (
     <main className="unlock-root">
-      <aside className="unlock-sidebar">
-        <div className="unlock-brand">
-          <span>u</span>
-          <strong>unlock.ai</strong>
-        </div>
-        <nav>
-          {navItems.map((item) => (
-            <button key={item.id} className={activePage === item.id ? 'active' : ''} onClick={() => setActivePage(item.id)}>
-              {item.label}
-            </button>
-          ))}
-        </nav>
-      </aside>
-      <section className="unlock-canvas">
-        {activePage === 'quests' && <QuestBoard filter={questFilter} setFilter={setQuestFilter} openDetail={() => setActivePage('quest-detail')} />}
-        {activePage === 'quest-detail' && <QuestDetail backToBoard={() => setActivePage('quests')} />}
-        {activePage === 'skills' && <SkillsMarketplace openSkill={() => setActivePage('skill-detail')} />}
-        {activePage === 'skill-detail' && <SkillDetail backToSkills={() => setActivePage('skills')} />}
-        {activePage === 'guides' && <GuidesPage />}
-        {activePage === 'tiers' && <AiTiersPage activeTab={tierTab} setActiveTab={setTierTab} />}
-        {activePage === 'usage' && <AiUsagePlaceholder />}
-      </section>
+      <div className="unlock-shell">
+        <aside className="unlock-sidebar">
+          <div className="unlock-brand">
+            <span>u</span>
+            <strong>unlock.ai</strong>
+          </div>
+          <p className="unlock-side-section">Navigation</p>
+          <nav>
+            {navItems.map((item) => (
+              <button key={item.id} className={activePage === item.id ? 'active' : ''} onClick={() => setActivePage(item.id)}>
+                <i className="unlock-nav-dot" />
+                {item.label}
+              </button>
+            ))}
+          </nav>
+          <p className="unlock-side-section">Apps</p>
+          <nav className="unlock-app-list">
+            {appItems.map((label) => (
+              <button key={label} disabled><i className="unlock-nav-dot" />{label}</button>
+            ))}
+          </nav>
+          <div className="unlock-user-chip">
+            <span>JK</span>
+            <strong>John</strong>
+          </div>
+        </aside>
+        <section className="unlock-canvas">
+          {activePage === 'quests' && <QuestBoard filter={questFilter} setFilter={setQuestFilter} openDetail={(ref) => { setSelectedQuest(ref); setActivePage('quest-detail'); }} />}
+          {activePage === 'quest-detail' && <QuestDetail questRef={selectedQuest} backToBoard={() => setActivePage('quests')} />}
+          {activePage === 'skills' && <SkillsMarketplace openPlugin={() => setActivePage('plugin-detail')} />}
+          {activePage === 'plugin-detail' && <PluginDetail backToSkills={() => setActivePage('skills')} openSkill={() => setActivePage('skill-detail')} />}
+          {activePage === 'skill-detail' && <SkillDetail backToPlugin={() => setActivePage('plugin-detail')} />}
+          {activePage === 'guides' && <GuidesPage />}
+          {activePage === 'tiers' && <AiTiersPage activeTab={tierTab} setActiveTab={setTierTab} />}
+          {activePage === 'usage' && <AiUsagePlaceholder />}
+        </section>
+      </div>
     </main>
   );
 }
@@ -459,74 +525,222 @@ function PageHeader({ eyebrow, title, children }: { eyebrow: string; title: stri
   );
 }
 
-function QuestBoard({ filter, setFilter, openDetail }: { filter: 'active' | 'completed'; setFilter: (filter: 'active' | 'completed') => void; openDetail: () => void }) {
-  const quests = filter === 'active' ? activeQuests : completedQuests;
+function QuestBoard({ filter, setFilter, openDetail }: { filter: 'active' | 'completed'; setFilter: (filter: 'active' | 'completed') => void; openDetail: (ref: QuestRef) => void }) {
+  const [tierFilter, setTierFilter] = useState<'All' | QuestKind>('All');
+  const [statusFilter, setStatusFilter] = useState<'All' | QuestState>('All');
+
+  const pool = filter === 'completed' ? completedQuests : activeQuests;
+  const quests = pool.filter((q) => (tierFilter === 'All' || q.kind === tierFilter) && (statusFilter === 'All' || q.state === statusFilter));
 
   return (
-    <div className="unlock-page">
-      <PageHeader eyebrow="Quest Board" title="Automators Quest Board">
-        <div className="unlock-language-toggle"><span>EN</span><span>JP</span></div>
-      </PageHeader>
-      <div className="unlock-filter-bar">
-        <button className={filter === 'active' ? 'selected' : ''} onClick={() => setFilter('active')}>Active quests</button>
-        <button className={filter === 'completed' ? 'selected' : ''} onClick={() => setFilter('completed')}>Completed</button>
-        <select aria-label="Tier filter"><option>All tiers</option><option>Tier 02</option><option>Tier 03</option></select>
-        <select aria-label="Status filter"><option>All statuses</option><option>Active</option><option>In Review</option></select>
-      </div>
-      <div className="unlock-quest-grid">
-        {quests.map((quest, index) => (
-          <button key={quest.title} className="unlock-quest-card" onClick={index === 0 ? openDetail : undefined}>
-            <div className="unlock-card-topline">
-              <span>{quest.tier}</span>
-              <em className={`unlock-status ${quest.status.toLowerCase().replace(' ', '-')}`}>{quest.status}</em>
-            </div>
-            <h2>{quest.title}</h2>
-            <p>{quest.description}</p>
-            <small>{quest.meta}</small>
+    <div className="unlock-page unlock-quest-page">
+      <header className="unlock-quest-header">
+        <div>
+          <h1>Quest Board</h1>
+          <p>Active automation challenges</p>
+        </div>
+        <div className="unlock-language-toggle"><span className="active">EN</span><span>KO</span></div>
+      </header>
+      <div className="unlock-filter-row">
+        <span className="unlock-filter-label">Tier:</span>
+        {tierFilters.map((t) => (
+          <button key={t} className={`unlock-pill ${tierFilter === t ? 'selected' : ''}`} onClick={() => setTierFilter(t)}>{t}</button>
+        ))}
+        <span className="unlock-filter-label">Status:</span>
+        {statusFilters.map((s) => (
+          <button
+            key={s}
+            className={`unlock-pill ${statusFilter === s ? 'selected' : ''}`}
+            onClick={() => {
+              setStatusFilter(s);
+              if (s === 'Completed') setFilter('completed');
+              else if (filter === 'completed') setFilter('active');
+            }}
+          >
+            {s}
           </button>
         ))}
       </div>
+      <div className="unlock-quest-grid">
+        {quests.map((quest) => {
+          const hasBody = !!quest.body;
+          return (
+            <button
+              key={quest.title}
+              className={`unlock-quest-card stripe-${quest.stripe}`}
+              onClick={hasBody ? () => openDetail({ list: filter === 'completed' ? 'completed' : 'active', idx: pool.indexOf(quest) }) : undefined}
+            >
+              <div className="unlock-card-topline">
+                <em className={`unlock-kind kind-${quest.kind.toLowerCase()}`}>{quest.kind === 'Quick' ? '⚡' : quest.kind === 'Solid' ? '✦' : '◆'} {quest.kind}</em>
+                <em className={`unlock-state state-${quest.state.toLowerCase().replace(' ', '-')}`}>{quest.state}</em>
+              </div>
+              <h2>{quest.title}</h2>
+              <p>{quest.description}</p>
+              <footer className="unlock-card-foot">
+                <span className="unlock-avatar">{quest.author.charAt(0)}</span>
+                <small>{quest.author}</small>
+                <small className="unlock-posted">⌚ {quest.posted}</small>
+                {quest.verified
+                  ? <small className="unlock-verified">✓ Verified</small>
+                  : <small className="unlock-builders">👤 {quest.builders} builder</small>}
+              </footer>
+            </button>
+          );
+        })}
+      </div>
     </div>
   );
 }
 
-function QuestDetail({ backToBoard }: { backToBoard: () => void }) {
+function QuestDetail({ questRef, backToBoard }: { questRef: QuestRef; backToBoard: () => void }) {
+  const pool = questRef.list === 'completed' ? completedQuests : activeQuests;
+  const quest = pool[questRef.idx] ?? activeQuests[0];
+  const isActive = quest.state === 'In Progress' || quest.state === 'Open';
+  const builders = quest.buildersList ?? [{ initial: 'I', mask: 'I***', color: '#e0533f' }];
+
   return (
-    <div className="unlock-page">
-      <PageHeader eyebrow="Quest Detail" title="Salesforce Opps & Files Quick-Links per Customer on CSM Dashboard">
-        <button className="unlock-primary-button">Edit PRD</button>
-      </PageHeader>
-      <button className="unlock-back-button" onClick={backToBoard}>← Back to Quest Board</button>
-      <div className="unlock-badge-row"><span>Tier 02</span><span>Active</span><span>Customer Success</span></div>
-      <article className="unlock-document-panel">
-        <h2>Product Requirements Doc</h2>
-        <h3>Summary</h3>
-        <p>The quest concerns quick links to Salesforce opportunities and customer files from a CSM dashboard.</p>
-        <h3>Context</h3>
-        <p>CSMs need faster access to customer-specific Salesforce opportunities and related file resources. The dashboard should reduce manual lookup and context switching.</p>
-        <h3>Users</h3>
-        <ul><li>Customer Success Managers.</li><li>Account or revenue teammates who need customer-specific account context.</li></ul>
-        <h3>Success Criteria</h3>
-        <ul><li>CSMs can access the right opportunities and files from the customer dashboard.</li><li>Links are reliable and customer-specific.</li><li>The workflow saves lookup time during account review or customer preparation.</li></ul>
-      </article>
+    <div className="unlock-page unlock-quest-detail-page">
+      <button className="unlock-back-link" onClick={backToBoard}>← Quest Board</button>
+
+      {quest.hero && (
+        <div className={`unlock-qd-hero ${quest.hero === 'demo' ? 'has-demo' : ''}`}>
+          {quest.hero === 'demo' && (
+            <div className="unlock-qd-demo-play"><span>▶</span><small>Demo walkthrough</small></div>
+          )}
+        </div>
+      )}
+
+      <div className="unlock-qd-layout">
+        <article className="unlock-qd-main">
+          <div className="unlock-qd-pills">
+            <em className={`unlock-kind kind-${quest.kind.toLowerCase()}`}>{quest.kind === 'Quick' ? '⚡' : quest.kind === 'Solid' ? '✦' : '◆'} {quest.kind}</em>
+            <em className={`unlock-state state-${quest.state.toLowerCase().replace(' ', '-')}`}>{quest.state}</em>
+            {quest.verified && <em className="unlock-verified-pill">✓ Verified</em>}
+            <small className="unlock-qd-time">⌚ {quest.posted}</small>
+          </div>
+          <h1 className="unlock-qd-title">{quest.title}</h1>
+          <div className="unlock-qd-body">
+            {quest.body?.map((para, i) => <QuestBodyBlock key={i} text={para} />)}
+          </div>
+
+          {isActive && (
+            <footer className="unlock-qd-cta">
+              <div>
+                <strong>🐝 Adam Flayman <span>— CSM coder bee</span></strong>
+                <p>Drafts PRD, TDD, and diagrams, then ships a PR on <code>sendbird-ai/csm-workspace</code>. You approve each step.</p>
+              </div>
+              <button className="unlock-primary-button unlock-build-with"><span>🐝</span> Build with Adam Flayman <em>→</em></button>
+            </footer>
+          )}
+        </article>
+
+        <aside className="unlock-qd-side">
+          <section>
+            <p className="unlock-qd-side-label">Quest Info</p>
+            <ul>
+              {quest.hrsSaved && <li>⚡ {quest.hrsSaved}</li>}
+              {quest.team && <li>🏢 {quest.team}</li>}
+              {quest.risk && <li>🛡 Risk: {quest.risk}</li>}
+            </ul>
+          </section>
+          {quest.questGiver && (
+            <section>
+              <p className="unlock-qd-side-label">Quest Giver</p>
+              <div className="unlock-qd-person">
+                <span style={{ background: quest.questGiver.color }}>{quest.questGiver.initial}</span>
+                <strong>{quest.questGiver.mask}</strong>
+              </div>
+            </section>
+          )}
+          <section>
+            <p className="unlock-qd-side-label">Builders ({builders.length})</p>
+            {builders.map((b, i) => (
+              <div className="unlock-qd-person" key={i}>
+                <span style={{ background: b.color }}>{b.initial}</span>
+                <strong>{b.mask}</strong>
+              </div>
+            ))}
+          </section>
+          {quest.completedBy && (
+            <section>
+              <p className="unlock-qd-side-label">Completed By</p>
+              <div className="unlock-qd-person">
+                <span style={{ background: quest.completedBy.color }}>{quest.completedBy.initial}</span>
+                <strong>{quest.completedBy.mask}</strong>
+              </div>
+            </section>
+          )}
+        </aside>
+      </div>
     </div>
   );
 }
 
-function SkillsMarketplace({ openSkill }: { openSkill: () => void }) {
+function QuestBodyBlock({ text }: { text: string }) {
+  if (text.startsWith('## ')) {
+    return <h2 className="unlock-qd-h2">{text.slice(3)}</h2>;
+  }
+  if (text.startsWith('- ')) {
+    return <p className="unlock-qd-li">{renderMd(text.slice(2))}</p>;
+  }
+  if (text.startsWith('**') && text.endsWith(':**')) {
+    return <p className="unlock-qd-strong">{text.replace(/\*\*/g, '')}</p>;
+  }
+  return <p>{renderMd(text)}</p>;
+}
+
+function renderMd(text: string): ReactNode {
+  const parts = text.split(/(\*\*[^*]+\*\*)/g);
+  return parts.map((part, i) => part.startsWith('**') && part.endsWith('**')
+    ? <strong key={i}>{part.slice(2, -2)}</strong>
+    : <Fragment key={i}>{part}</Fragment>);
+}
+
+function SkillsMarketplace({ openPlugin }: { openPlugin: () => void }) {
   return (
-    <div className="unlock-page">
-      <PageHeader eyebrow="Skills" title="Skills Marketplace">
-        <div className="unlock-action-row"><button>My Skills</button><button>Trash</button><button>New Skill</button><button className="unlock-primary-button">New Plugin</button></div>
-      </PageHeader>
-      <div className="unlock-market-controls">
-        <input placeholder="Search skills and plugins" />
+    <div className="unlock-page unlock-skills-page">
+      <header className="unlock-quest-header">
+        <div>
+          <h1>Skills Marketplace</h1>
+          <p>Browse, install, and share reusable automation skills</p>
+        </div>
+        <div className="unlock-skill-actions">
+          <button>📂 My Skills</button>
+          <button>🗑 Trash</button>
+          <button>+ New Skill</button>
+          <button className="unlock-primary-button-soft">+ New Plugin</button>
+        </div>
+      </header>
+
+      <h3 className="unlock-section-heading">Plugins</h3>
+      <div className="unlock-plugin-grid">
+        {pluginCards.map((p, i) => (
+          <article key={p.name} className="unlock-plugin-card" onClick={i === 0 ? openPlugin : undefined}>
+            <header>
+              <span className="unlock-plugin-folder">📁 <strong>{p.name}</strong></span>
+              <small>@ {p.skillCount} skills</small>
+            </header>
+            <p>{p.description}</p>
+            <footer>
+              <span className={`unlock-plugin-badge badge-${p.badgeColor}`}>{p.badgeLetter}</span>
+              <em className="unlock-plugin-tag">PLUGIN</em>
+              <span className="unlock-plugin-lock">🔒</span>
+            </footer>
+          </article>
+        ))}
+      </div>
+
+      <h3 className="unlock-section-heading">Skills</h3>
+      <div className="unlock-skill-controls">
+        <input placeholder="🔍 Search skills..." />
         <select aria-label="Sort skills"><option>Newest</option><option>Most relevant</option></select>
       </div>
-      <div className="unlock-tag-pills">{['Sales', 'Developer', 'Recruiting', 'Customer Success', 'Forward-Deployed', 'Design', 'Demand Generation', 'Product Marketing'].map((tag) => <span key={tag}>{tag}</span>)}</div>
+      <div className="unlock-tag-row">
+        {skillTags.map((t) => <span key={t} className="unlock-skill-tag">{t}</span>)}
+      </div>
       <div className="unlock-skill-grid">
         {marketplaceSkills.map((skill, index) => (
-          <button key={skill.name} className="unlock-skill-card" onClick={index === 0 ? openSkill : undefined}>
+          <button key={skill.name} className="unlock-skill-card" onClick={index === 0 ? openPlugin : undefined}>
             <span>{skill.category}</span>
             <h2>{skill.name}</h2>
             <p>{skill.description}</p>
@@ -538,48 +752,207 @@ function SkillsMarketplace({ openSkill }: { openSkill: () => void }) {
   );
 }
 
-function SkillDetail({ backToSkills }: { backToSkills: () => void }) {
+function PluginDetail({ backToSkills, openSkill }: { backToSkills: () => void; openSkill: () => void }) {
+  const [tab, setTab] = useState<'skills' | 'members' | 'history'>('skills');
   return (
-    <div className="unlock-page">
-      <PageHeader eyebrow="Skill Detail" title="meddpicc advisor">
-        <button className="unlock-primary-button">Install</button>
-      </PageHeader>
-      <button className="unlock-back-button" onClick={backToSkills}>← Back to Skills</button>
-      <div className="unlock-detail-layout">
-        <aside className="unlock-side-panel">
-          <span>Plugin · Sales</span>
-          <h3>MEDDPICC deal qualification advisor</h3>
-          <p>Author: Revenue Enablement</p>
-          <button className="unlock-primary-button">Install Skill</button>
-        </aside>
-        <article className="unlock-document-panel">
-          <h2>SKILL.md</h2>
-          <h3>Purpose</h3>
-          <p>Help sales teams apply MEDDPICC qualification thinking to active deals.</p>
-          <h3>Capabilities</h3>
-          <ul><li>Explain or apply MEDDPICC qualification thinking.</li><li>Identify missing deal information.</li><li>Highlight qualification risk.</li><li>Guide next-step thinking.</li></ul>
+    <div className="unlock-page unlock-plugin-page">
+      <button className="unlock-back-link" onClick={backToSkills}>← Back to Skills</button>
+      <h1 className="unlock-plugin-title">sales-skills</h1>
+      <p className="unlock-plugin-sub">AI-powered sales skills for the Sendbird sales team</p>
+      <p className="unlock-plugin-path">/sales-skills</p>
+
+      <div className="unlock-plugin-tabs">
+        <button className={tab === 'skills' ? 'active' : ''} onClick={() => setTab('skills')}>Skills</button>
+        <button className={tab === 'members' ? 'active' : ''} onClick={() => setTab('members')}>Members</button>
+        <button className={tab === 'history' ? 'active' : ''} onClick={() => setTab('history')}>History</button>
+      </div>
+
+      {tab === 'skills' && (
+        <>
+          <p className="unlock-plugin-count">Skills ({salesSkills.length})</p>
+          <div className="unlock-sales-skill-grid">
+            {salesSkills.map((s) => (
+              <button
+                key={s.name}
+                className="unlock-sales-skill-card"
+                onClick={s.name === 'meddpicc advisor' ? openSkill : undefined}
+              >
+                <header>
+                  <h4>{s.name}</h4>
+                  <em className="unlock-sales-tag">sales-skills</em>
+                </header>
+                <p>{s.desc}</p>
+                <footer>
+                  <span className="unlock-sales-avatar">I</span>
+                  <small>I***</small>
+                  <em>↑ {s.up}</em>
+                  <em>↓ {s.down}</em>
+                </footer>
+              </button>
+            ))}
+          </div>
+        </>
+      )}
+      {tab === 'members' && <p className="unlock-empty">Members tab</p>}
+      {tab === 'history' && <p className="unlock-empty">History tab</p>}
+    </div>
+  );
+}
+
+function SkillDetail({ backToPlugin }: { backToPlugin: () => void }) {
+  return (
+    <div className="unlock-page unlock-skill-detail-page">
+      <button className="unlock-back-link" onClick={backToPlugin}>← Back to Skills</button>
+
+      <div className="unlock-skill-head">
+        <h1>meddpicc advisor</h1>
+        <em className="unlock-sales-tag">sales-skills</em>
+      </div>
+      <div className="unlock-skill-meta">
+        <span className="unlock-sales-avatar">I</span>
+        <small>I***</small>
+        <em>⬇ 60 installs</em>
+        <em>↑ 1</em>
+      </div>
+
+      <div className="unlock-skill-layout">
+        <article className="unlock-skill-main">
+          <section className="unlock-skill-card-panel">
+            <h3>Description</h3>
+            <p>{meddpiccDescription}</p>
+          </section>
+          <section className="unlock-skill-card-panel">
+            <h3>SKILL.md</h3>
+            <pre className="unlock-skill-md">{meddpiccSkillMd}</pre>
+          </section>
         </article>
+        <aside className="unlock-skill-side">
+          <section>
+            <p className="unlock-qd-side-label">Install</p>
+            <p className="unlock-install-sub">Add to Claude Code as a slash command</p>
+            <code className="unlock-install-cmd">claude plugin add sales-skills/meddpicc-advisor</code>
+          </section>
+          <section>
+            <p className="unlock-qd-side-label">Author</p>
+            <div className="unlock-qd-person">
+              <span style={{ background: '#e0533f' }}>I</span>
+              <strong>I***</strong>
+            </div>
+          </section>
+        </aside>
       </div>
     </div>
   );
 }
 
 function GuidesPage() {
+  const [view, setView] = useState<'overview' | 'detail'>('overview');
+  const categories = [
+    { key: 'overview', label: 'Overview' },
+    { key: 'team-app', label: 'TEAM APP DEPLOYMENT', section: true, expanded: true },
+    { key: 'app-dev', label: 'APP DEVELOPMENT', section: true },
+    { key: 'vercel', label: 'VERCEL', section: true },
+    { key: 'nbn', label: 'NBN', section: true },
+    { key: 'ci-checks', label: 'CI CHECKS', section: true },
+    { key: 'automators', label: 'AUTOMATORS PLATFORM', section: true },
+  ];
+
+  const teamAppGuides = [
+    'Git & GitHub Settings',
+    'Monorepo Overview',
+    'Slack Bot Provisioning',
+    'Configuring a Monorepo',
+    'Shared Database with Supabase',
+    'Deploying with Vercel',
+    'Scaffolding a New App',
+    'Migrating with Claude Code',
+  ];
+
+  const overviewCards = [
+    { title: 'Team App Deployment', desc: "Everything you need to set up, deploy, and manage your team's apps in a monorepo.", count: 8 },
+    { title: 'App Development', desc: 'Guides for building apps, automations, and integrations.', count: 6 },
+    { title: 'Vercel', desc: 'Guides for deploying, configuring, and sharing apps on the [Vercel platform](https://vercel.com/docs).', count: 6 },
+    { title: 'n8n', desc: 'Guides for using n8n workflow automation with our tools and AI assistants.', count: 1 },
+    { title: 'CI Checks', desc: "Org-wide CI checks that run automatically on every PR across all `sendbird-ai` repos. No per-repo setup required.", count: 1 },
+    { title: 'Automators Platform', desc: "Everything you need to know about using The Automator's Guild — the RPG-style platform where employees post...", count: 3 },
+  ];
+
   return (
-    <div className="unlock-page">
-      <PageHeader eyebrow="Guides" title="Git & GitHub Settings" />
-      <div className="unlock-detail-layout">
-        <aside className="unlock-guide-list"><button className="active">Git & GitHub Settings</button><button>GitHub CLI</button><button>GitHub MCP</button></aside>
-        <article className="unlock-document-panel">
-          <h2>Git & GitHub Settings</h2>
-          <p>Use this guide to configure Git, GitHub CLI, and the GitHub MCP connection for AI coding tools.</p>
-          <h3>Setup Commands</h3>
-          <pre>git config --global user.name "Your Name"{'\n'}git config --global user.email "you@example.com"</pre>
-          <h3>GitHub CLI</h3>
-          <pre>brew install gh{'\n'}gh auth login</pre>
-          <h3>GitHub MCP</h3>
-          <p>Connect the GitHub MCP server after CLI authentication so coding agents can inspect repository context.</p>
-        </article>
+    <div className="unlock-page unlock-guides-page">
+      <div className="unlock-guides-layout">
+        <aside className="unlock-guides-nav">
+          <h4>Guides</h4>
+          {categories.map((c) => (
+            <Fragment key={c.key}>
+              <button
+                className={`unlock-guides-nav-item ${c.section ? 'section' : ''} ${view === 'overview' && c.key === 'overview' ? 'active' : ''}`}
+                onClick={() => { if (c.key === 'overview') setView('overview'); }}
+              >
+                {c.label}
+                {c.section && !c.expanded && <span className="chev">›</span>}
+              </button>
+              {c.key === 'team-app' && c.expanded && (
+                <div className="unlock-guides-sublist">
+                  {teamAppGuides.map((g, i) => (
+                    <button key={g} className={view === 'detail' && i === 0 ? 'active' : ''} onClick={() => setView('detail')}>{g}</button>
+                  ))}
+                </div>
+              )}
+            </Fragment>
+          ))}
+        </aside>
+
+        {view === 'overview' ? (
+          <section className="unlock-guides-main">
+            <h1>Guides</h1>
+            <p className="unlock-guides-sub">Everything you need to know about using The Automator's Guild.</p>
+            <div className="unlock-guides-overview-grid">
+              {overviewCards.map((c) => (
+                <article key={c.title} className="unlock-guides-overview-card" onClick={() => setView('detail')}>
+                  <span className="unlock-guides-icon">📘</span>
+                  <h3>{c.title}</h3>
+                  <p>{c.desc}</p>
+                  <small>{c.count} guides →</small>
+                </article>
+              ))}
+            </div>
+          </section>
+        ) : (
+          <>
+            <section className="unlock-guides-main">
+              <p className="unlock-breadcrumb">Guides › Git & GitHub Settings</p>
+              <h1>Git & GitHub Settings</h1>
+              <p>This guide documents the Git and GitHub configuration for the Automators repository. These settings ensure clean history, prevent accidental overwrites, and keep the deployment pipeline safe.</p>
+              <h2>Prerequisites</h2>
+              <h3>GitHub CLI (gh)</h3>
+              <p>Install the GitHub CLI — it's required for creating PRs, managing repos, and integrating with AI tools:</p>
+              <pre>{'# macOS\nbrew install gh\n\n# Then authenticate\ngh auth login'}</pre>
+              <p>Once authenticated, you can create PRs, merge, check CI status, and manage the repo all from the terminal.</p>
+              <h3>GitHub MCP Server (for AI tools)</h3>
+              <p>If you use Claude Code or other AI coding tools, install the official GitHub MCP server to give your AI agent access to GitHub:</p>
+              <pre>npx -y @modelcontextprotocol/server-github</pre>
+              <p>This lets your AI tools create issues, PRs, review code, and manage repos through the MCP protocol. See <a href="#">GitHub's MCP server docs</a> for configuration details.</p>
+            </section>
+            <aside className="unlock-guides-toc">
+              <h5>On this page</h5>
+              <a className="active" href="#prereq">Prerequisites</a>
+              <a href="#cli">GitHub CLI (gh)</a>
+              <a href="#mcp">GitHub MCP Server (for AI tools)</a>
+              <a href="#branch">Branch Strategy</a>
+              <a href="#protect">Branch Protection Rules</a>
+              <a href="#merge">Merge Settings</a>
+              <a href="#workflow">Recommended Workflow</a>
+              <a href="#start">Starting a feature</a>
+              <a href="#while">While working</a>
+              <a href="#pr">Creating a PR</a>
+              <a href="#date">If your PR is out of date</a>
+              <a href="#release">Releasing to production</a>
+              <a href="#schema">Schema Changes</a>
+              <a href="#local">Local Git Config (Recommended)</a>
+              <a href="#quick">Quick Reference</a>
+            </aside>
+          </>
+        )}
       </div>
     </div>
   );
@@ -588,10 +961,12 @@ function GuidesPage() {
 function AiTiersPage({ activeTab, setActiveTab }: { activeTab: 'tiers' | 'arc' | 'team'; setActiveTab: (tab: 'tiers' | 'arc' | 'team') => void }) {
   return (
     <div className="unlock-page unlock-tiers-page">
-      <div className="unlock-tabs unlock-tier-tabs">
-        <button className={activeTab === 'tiers' ? 'active' : ''} onClick={() => setActiveTab('tiers')}><span>01</span> The Five Tiers</button>
-        <button className={activeTab === 'arc' ? 'active' : ''} onClick={() => setActiveTab('arc')}><span>02</span> Organisational Arc</button>
-        <button className={activeTab === 'team' ? 'active' : ''} onClick={() => setActiveTab('team')}><span>03</span> By Team</button>
+      <h1 className="unlock-tier-hero">Becoming <em>AI-First<mark>.</mark></em></h1>
+      <p className="unlock-tier-sub">How every person at unlock.ai moves from using AI to becoming AI-first — and how we measure the journey.</p>
+      <div className="unlock-tier-tab-row">
+        <button className={activeTab === 'tiers' ? 'active' : ''} onClick={() => setActiveTab('tiers')}><sup>01</sup> The Five Tiers</button>
+        <button className={activeTab === 'arc' ? 'active' : ''} onClick={() => setActiveTab('arc')}><sup>02</sup> Organisational Arc</button>
+        <button className={activeTab === 'team' ? 'active' : ''} onClick={() => setActiveTab('team')}><sup>03</sup> By Team</button>
       </div>
       {activeTab === 'tiers' && <TierTable />}
       {activeTab === 'arc' && <ArcView />}
@@ -600,6 +975,36 @@ function AiTiersPage({ activeTab, setActiveTab }: { activeTab: 'tiers' | 'arc' |
   );
 }
 
+type TierExpandedContent = {
+  mindset: string[];
+  produce: string[];
+  next: string[];
+  stageNote?: string;
+};
+
+const tierExpanded: Record<string, TierExpandedContent> = {
+  '02': {
+    mindset: [
+      'Loads the company context before the ask — Cowork, the right MCP, the relevant docs',
+      'Works inside the IDE or Cowork rather than bouncing to a browser',
+      'Keeps a short list of tuned prompts — and posts the best ones in Slack',
+      'Picks Claude for writing, Codex for code, a connector for a specific job — on purpose',
+    ],
+    produce: [
+      'A board memo in thirty minutes instead of an afternoon',
+      'Research that spans Gong, Notion, and the Corporate Brain in one pass',
+      'PRs that arrive with tests and docs already drafted',
+      'The weekly note nobody asked for but everybody reads',
+    ],
+    next: [
+      'Chain two tools together without you in the middle',
+      'Ship a Slackbot your team reaches for without thinking',
+      'Pick up your first Automators quest',
+    ],
+    stageNote: '→ Stage 2, Connected AI — we are here',
+  },
+};
+
 function TierTable() {
   const [expandedTier, setExpandedTier] = useState('02');
 
@@ -607,50 +1012,35 @@ function TierTable() {
     <div className="unlock-five-tiers">
       {tierRows.map((tier) => {
         const isExpanded = expandedTier === tier.id;
+        const content = tierExpanded[tier.id];
 
         return (
-          <article className={isExpanded ? 'unlock-tier-row expanded' : 'unlock-tier-row'} key={tier.id}>
+          <article className={`unlock-tier-row ${isExpanded ? 'expanded' : ''} ${isExpanded && tier.id === '02' ? 'accent' : ''}`} key={tier.id}>
             <button className="unlock-tier-summary" onClick={() => setExpandedTier(isExpanded ? '' : tier.id)}>
-              <div className="unlock-tier-title">
-                <span>{tier.id}</span>
-                <h2>{tier.title} <em>— {tier.subtitle}</em></h2>
-              </div>
-              <p>{tier.summary}</p>
+              <span className="unlock-tier-num">{tier.id}</span>
+              <h2 className="unlock-tier-name">{tier.title} <em>— {tier.subtitle}</em></h2>
+              <p className="unlock-tier-summary-text">{tier.summary}</p>
               <div className="unlock-token-band">
                 <strong>{tier.tokens}</strong>
-                <small>tokens / day</small>
+                <small>TOKENS / DAY</small>
               </div>
-              <i>{isExpanded ? '×' : '+'}</i>
+              <i className="unlock-tier-expand">{isExpanded ? '×' : '+'}</i>
             </button>
 
-            {isExpanded && tier.id === '02' && (
+            {isExpanded && content && (
               <div className="unlock-tier-expanded">
                 <section>
-                  <h3>Mindset</h3>
-                  <ul>
-                    <li>Loads the company context before the ask — Cowork, the right MCP, the relevant docs.</li>
-                    <li>Works inside the IDE or Cowork rather than bouncing to a browser.</li>
-                    <li>Keeps a short list of tuned prompts — and posts the best ones in Slack.</li>
-                    <li>Picks Claude for writing, Codex for code, a connector for a specific job — on purpose.</li>
-                  </ul>
+                  <h3>MINDSET</h3>
+                  <ul>{content.mindset.map((b) => <li key={b}>{b}</li>)}</ul>
                 </section>
                 <section>
-                  <h3>What you produce</h3>
-                  <ul>
-                    <li>A board memo in thirty minutes instead of an afternoon.</li>
-                    <li>Research that spans Gong, Notion, and the Corporate Brain in one pass.</li>
-                    <li>PRs that arrive with tests and docs already drafted.</li>
-                    <li>The weekly note nobody asked for but everybody reads.</li>
-                  </ul>
+                  <h3>WHAT YOU PRODUCE</h3>
+                  <ul>{content.produce.map((b) => <li key={b}>{b}</li>)}</ul>
                 </section>
                 <section>
-                  <h3>Next step to level up</h3>
-                  <ul>
-                    <li>Chain two tools together without you in the middle.</li>
-                    <li>Ship a Slackbot your team reaches for without thinking.</li>
-                    <li>Pick up your first Automators quest.</li>
-                  </ul>
-                  <p>→ Stage 2 Connected AI — we are here</p>
+                  <h3>NEXT STEP TO LEVEL UP</h3>
+                  <ul>{content.next.map((b) => <li key={b}>{b}</li>)}</ul>
+                  {content.stageNote && <p className="unlock-stage-note">{content.stageNote}</p>}
                 </section>
               </div>
             )}
@@ -661,23 +1051,129 @@ function TierTable() {
   );
 }
 
+type ArcStage = {
+  id: string;
+  title: string;
+  italic: string;
+  body: string;
+  status: 'COMPLETED' | 'WE ARE HERE' | 'TARGET · FY27 H1' | 'HORIZON';
+};
+
+const arcStages: ArcStage[] = [
+  {
+    id: '01',
+    title: 'One-Off',
+    italic: 'AI',
+    body: 'People copy-paste between tools and lean on AI to move their own work along. Gains are real but individual — nothing builds on itself.',
+    status: 'COMPLETED',
+  },
+  {
+    id: '02',
+    title: 'Connected',
+    italic: 'AI',
+    body: 'AI plugs into the company brain. No more copy-paste — it pulls data across systems and aggregates context better than any one person could.',
+    status: 'WE ARE HERE',
+  },
+  {
+    id: '03',
+    title: 'Autonomous',
+    italic: 'AI',
+    body: 'Agents act on their own — making decisions and taking steps that advance the goals we set, without a human prompting each move.',
+    status: 'TARGET · FY27 H1',
+  },
+  {
+    id: '04',
+    title: 'AI',
+    italic: 'Native',
+    body: 'Agents running critical workflows across all teams. Automators per employee compounding at scale.',
+    status: 'HORIZON',
+  },
+];
+
 function ArcView() {
+  // Stage x-positions and dot y-positions are percentages of the plot area
+  // (left:8% reserves space for the y-axis label, bottom 12% for x-axis labels).
+  // The plot area is rendered by SVG; text/labels are HTML overlays so they
+  // stay crisp regardless of container width.
+  const stages = [
+    { id: '01', label: 'STAGE 01', xPct: 14 },
+    { id: '02', label: 'STAGE 02', xPct: 38 },
+    { id: '03', label: 'STAGE 03', xPct: 64 },
+    { id: '04', label: 'STAGE 04', xPct: 90 },
+  ];
+  // Plot coordinates use 0..100 in both axes. SVG stretches with preserveAspectRatio="none";
+  // strokes use non-scaling-stroke to stay 2px regardless of stretch.
+  const px = (pct: number) => pct; // x in 0..100
+  const py = (pct: number) => 100 - pct; // y flipped (0 = bottom)
+  // Realised: flat near origin, slight rise to "we are here" at Stage 02
+  const realisedD = `M ${px(14)} ${py(8)} Q ${px(26)} ${py(10)} ${px(38)} ${py(20)}`;
+  // Projected from we-are-here, accelerating upward
+  const projectedD = `M ${px(38)} ${py(20)} Q ${px(54)} ${py(40)} ${px(64)} ${py(60)} T ${px(90)} ${py(92)}`;
+  const fillD = `${projectedD} L ${px(90)} ${py(0)} L ${px(38)} ${py(0)} Z`;
   return (
-    <div className="unlock-arc-grid">
-      {['One-Off AI', 'Connected AI', 'Autonomous AI', 'AI Native'].map((stage, index) => (
-        <article key={stage}><span>Stage 0{index + 1}</span><h2>{stage}</h2><p>{index === 1 ? 'Current stage' : index < 1 ? 'Completed' : 'Target'}</p></article>
-      ))}
+    <div className="unlock-arc">
+      <div className="unlock-arc-chart">
+        <div className="unlock-arc-chart-head">
+          <h3>Maturity <em>vs.</em> Progress</h3>
+          <div className="unlock-arc-legend">
+            <span><i className="legend-solid" /> REALISED</span>
+            <span><i className="legend-dashed" /> PROJECTED</span>
+          </div>
+        </div>
+        <div className="unlock-arc-plot">
+          <span className="arc-y-high">high</span>
+          <span className="arc-y-low">low</span>
+          <span className="arc-y-rotated">AI MATURITY</span>
+          <svg className="unlock-arc-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="arcFill" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0%" stopColor="#d9f06b" stopOpacity="0.55" />
+                <stop offset="100%" stopColor="#d9f06b" stopOpacity="0" />
+              </linearGradient>
+            </defs>
+            <line x1="6" y1="100" x2="100" y2="100" className="arc-axis" />
+            <path d={fillD} fill="url(#arcFill)" />
+            <path d={realisedD} className="arc-realised" />
+            <path d={projectedD} className="arc-projected" />
+            <circle cx={px(14)} cy={py(8)} r="0.9" className="arc-dot" />
+            <circle cx={px(38)} cy={py(20)} r="1.6" className="arc-dot-here" />
+            <circle cx={px(64)} cy={py(60)} r="0.9" className="arc-dot-faded" />
+            <circle cx={px(90)} cy={py(92)} r="0.9" className="arc-dot-faded" />
+          </svg>
+          <span className="arc-anno arc-anno-early" style={{ left: '18%', bottom: '24%' }}>early adoption</span>
+          <span className="arc-anno arc-anno-here" style={{ left: '40%', bottom: '32%' }}>we are here</span>
+          <span className="arc-anno arc-anno-faded" style={{ left: '52%', bottom: '50%' }}>agents take hold</span>
+          <span className="arc-anno arc-anno-faded" style={{ left: '72%', bottom: '78%' }}>compounding leverage</span>
+          <div className="unlock-arc-xlabels">
+            {stages.map((s) => (
+              <span key={s.id} style={{ left: `${s.xPct}%` }}>{s.label}</span>
+            ))}
+          </div>
+          <span className="arc-x-foot">ORGANISATIONAL PROGRESS</span>
+        </div>
+      </div>
+
+      <div className="unlock-arc-stages">
+        {arcStages.map((s) => (
+          <article key={s.id} className={`unlock-arc-stage ${s.status === 'WE ARE HERE' ? 'here' : ''}`}>
+            <span className="unlock-arc-stage-num">STAGE {s.id}</span>
+            <h4>{s.title} <em>{s.italic}</em></h4>
+            <p>{s.body}</p>
+            <em className={`unlock-arc-status status-${s.status.toLowerCase().replace(/[\s·]+/g, '-')}`}>{s.status}</em>
+          </article>
+        ))}
+      </div>
     </div>
   );
 }
 
 function TeamMatrix() {
   const columns = [
-    ['01', 'Beginner · Adopter'],
-    ['02', 'Intermediate · Today'],
-    ['03', 'Expert · Architect'],
-    ['04', 'Catalyst'],
-    ['05', 'AI God · Multiplier'],
+    ['01', 'BEGINNER · ADOPTER'],
+    ['02', 'INTERMEDIATE · TODAY'],
+    ['03', 'EXPERT · ARCHITECT'],
+    ['04', 'CATALYST'],
+    ['05', 'AI GOD · MULTIPLIER'],
   ];
   const rows = [
     {
@@ -724,7 +1220,7 @@ function TeamMatrix() {
 
   return (
     <div className="unlock-team-matrix">
-      <div className="unlock-team-corner" />
+      <div className="unlock-team-corner">TEAM</div>
       {columns.map(([number, label]) => (
         <div className="unlock-team-head" key={number}>
           <strong>{number}</strong>
@@ -743,443 +1239,221 @@ function TeamMatrix() {
   );
 }
 
+type UsageTab = 'company' | 'team' | 'leaderboard';
+
 function AiUsagePlaceholder() {
+  const [tab, setTab] = useState<UsageTab>('company');
+
   return (
     <div className="unlock-page unlock-usage-page">
-      <PageHeader eyebrow="AI Usage" title="Token tracking dashboard">
-        <span className="unlock-usage-date">24:25–25:40 source segment</span>
-      </PageHeader>
-
-      <section className="unlock-usage-hero">
+      <header className="unlock-usage-header">
         <div>
-          <p className="eyebrow">Company-wide AI adoption</p>
-          <h2>Are more people moving into the higher AI tiers?</h2>
-          <p>Track token usage by tier, the smoothness of the adoption curve, and whether leaders are visibly using AI themselves.</p>
+          <h1>AI Usage</h1>
+          <p>Claude Code & Codex — last 30 days</p>
         </div>
-        <div className="unlock-usage-kpi">
-          <strong>42.8M</strong>
-          <span>tokens / day</span>
-        </div>
-      </section>
+        <nav className="unlock-usage-tabs">
+          <button className={tab === 'company' ? 'active' : ''} onClick={() => setTab('company')}>Company</button>
+          <a className="unlock-usage-tab-link" href="https://ai-token-dashboard.vercel.app" target="_blank" rel="noopener noreferrer">My Usage</a>
+          <button className={tab === 'team' ? 'active' : ''} onClick={() => setTab('team')}>My Team</button>
+          <button className={tab === 'leaderboard' ? 'active' : ''} onClick={() => setTab('leaderboard')}>Leaderboard</button>
+        </nav>
+      </header>
 
-      <section className="unlock-usage-grid">
-        {usageDonuts.map((donut) => (
-          <article className="unlock-donut-card" key={donut.label}>
-            <div className="unlock-donut" style={{ '--donut-value': `${donut.value}%`, '--donut-colour': donut.colour } as CSSProperties}>
-              <span>{donut.value}%</span>
+      {tab === 'company' && <CompanyUsage />}
+      {tab === 'team' && <MyTeamUsage />}
+      {tab === 'leaderboard' && <LeaderboardUsage />}
+    </div>
+  );
+}
+
+function CompanyUsage() {
+  return (
+    <>
+      <div className="unlock-kpi-row">
+        <article className="unlock-kpi-card">
+          <span className="unlock-kpi-label">⚡ Total Tokens (30d)</span>
+          <strong>314.7B</strong>
+          <small>208.6B CC + 106.2B Codex</small>
+        </article>
+        <article className="unlock-kpi-card">
+          <span className="unlock-kpi-label">👤 Active Builders</span>
+          <strong>191</strong>
+          <small>unique users with activity</small>
+        </article>
+        <article className="unlock-kpi-card">
+          <span className="unlock-kpi-label">✦ Claude Code Share</span>
+          <strong>66%</strong>
+          <small>of total token usage</small>
+        </article>
+      </div>
+
+      <div className="unlock-usage-row">
+        <article className="unlock-usage-panel">
+          <h3>Claude Code vs Codex</h3>
+          <p className="unlock-usage-sub">Token distribution across all builders</p>
+          <div className="unlock-donut-large">
+            <svg viewBox="0 0 120 120">
+              <circle cx="60" cy="60" r="48" className="donut-bg" />
+              <circle cx="60" cy="60" r="48" className="donut-codex" strokeDasharray="100 200" strokeDashoffset="-198" />
+              <circle cx="60" cy="60" r="48" className="donut-cc" strokeDasharray="199 200" strokeDashoffset="0" />
+            </svg>
+            <div className="unlock-donut-center">
+              <strong>66%</strong>
+              <small>Claude Code</small>
             </div>
-            <h3>{donut.label}</h3>
-            <p>{donut.caption}</p>
-          </article>
-        ))}
-      </section>
-
-      <section className="unlock-usage-panels">
-        <article className="unlock-curve-panel">
-          <div>
-            <p className="eyebrow">Smoothness of the curve</p>
-            <h3>Usage distribution should slope upward, not spike once.</h3>
           </div>
-          <div className="unlock-line-chart">
-            <i /><i /><i /><i /><i /><i />
+          <div className="unlock-donut-legend">
+            <span><i className="dot-cc" /> Claude Code — 208.6B</span>
+            <span><i className="dot-codex" /> Codex — 106.2B</span>
           </div>
         </article>
 
-        <article className="unlock-team-bars">
-          <p className="eyebrow">Team usage graph</p>
-          {teamUsage.map(([team, value]) => (
-            <div className="unlock-bar-row" key={team}>
-              <span>{team}</span>
-              <div><i style={{ width: `${value}%` }} /></div>
-              <em>{value}%</em>
+        <article className="unlock-usage-panel">
+          <h3>Daily Token Trend</h3>
+          <p className="unlock-usage-sub">Company-wide usage over the last 30 days</p>
+          <TrendChart />
+          <div className="unlock-donut-legend">
+            <span><i className="dot-cc" /> Claude Code</span>
+            <span><i className="dot-codex" /> Codex</span>
+          </div>
+        </article>
+      </div>
+
+      <article className="unlock-builders-panel">
+        <h3>Top Builders</h3>
+        <p className="unlock-usage-sub">Names partially masked — hover bars for CC / Codex breakdown</p>
+        <div className="unlock-builders-list">
+          {topBuilders.map((b) => {
+            const total = b.cc + b.codex;
+            const ccPct = (b.cc / 35) * 100;
+            const codexPct = (b.codex / 35) * 100;
+            return (
+              <div className="unlock-builder-row" key={b.mask} title={`Claude Code: ${b.cc}B tokens · Codex: ${b.codex}B tokens`}>
+                <span className="unlock-builder-name">{b.mask}</span>
+                <div className="unlock-builder-bar">
+                  <i className="bar-cc" style={{ width: `${ccPct}%` }} />
+                  <i className="bar-codex" style={{ width: `${codexPct}%` }} />
+                </div>
+                <em className="unlock-builder-total">{total.toFixed(1)}B</em>
+              </div>
+            );
+          })}
+        </div>
+      </article>
+    </>
+  );
+}
+
+function TrendChart() {
+  const max = 20;
+  const w = 100;
+  const h = 100;
+  const step = w / (ccTrend.length - 1);
+  const ccPoints = ccTrend.map((v, i) => `${i * step},${h - (v / max) * h}`).join(' ');
+  const codexPoints = codexTrend.map((v, i) => `${i * step},${h - (v / max) * h}`).join(' ');
+  const ccArea = `0,${h} ${ccPoints} ${w},${h}`;
+  const codexArea = `0,${h} ${codexPoints} ${w},${h}`;
+
+  return (
+    <div className="unlock-trend-wrap">
+      <div className="unlock-trend-y">
+        <span>20.0B</span>
+        <span>15.0B</span>
+        <span>10.0B</span>
+        <span>5.0B</span>
+        <span>0</span>
+      </div>
+      <svg viewBox={`0 0 ${w} ${h}`} preserveAspectRatio="none" className="unlock-trend-svg">
+        <polygon points={codexArea} className="trend-area-codex" />
+        <polygon points={ccArea} className="trend-area-cc" />
+        <polyline points={codexPoints} className="trend-line-codex" />
+        <polyline points={ccPoints} className="trend-line-cc" />
+      </svg>
+      <div className="unlock-trend-x">
+        {trendDisplayLabels.map((d) => <span key={d}>{d}</span>)}
+      </div>
+    </div>
+  );
+}
+
+function MyTeamUsage() {
+  return (
+    <>
+      <div className="unlock-section-sub">
+        <h2>My Team</h2>
+        <p>Usage for direct and indirect reports</p>
+      </div>
+      <div className="unlock-kpi-row">
+        <article className="unlock-kpi-card">
+          <span className="unlock-kpi-label">Team Tokens</span>
+          <strong>314.7B</strong>
+        </article>
+        <article className="unlock-kpi-card">
+          <span className="unlock-kpi-label">Active Members</span>
+          <strong>191<small className="kpi-frac"> / 192</small></strong>
+        </article>
+        <article className="unlock-kpi-card">
+          <span className="unlock-kpi-label">Period Trend</span>
+          <strong className="kpi-up">↑ 135%</strong>
+          <small>vs prior period</small>
+        </article>
+      </div>
+      <article className="unlock-reports-panel">
+        <h3>Direct Reports</h3>
+        <div className="unlock-reports-table">
+          <header>
+            <span>NAME</span>
+            <em>TOKENS</em>
+            <em>ACTIVITY</em>
+          </header>
+          {directReports.map((r) => (
+            <div className="unlock-report-row" key={r.mask}>
+              <span>{r.mask}</span>
+              <em>{r.tokens} <small>tokens</small></em>
+              <em>{r.activeDays}d active</em>
+            </div>
+          ))}
+        </div>
+      </article>
+    </>
+  );
+}
+
+function LeaderboardUsage() {
+  return (
+    <>
+      <div className="unlock-section-sub">
+        <h2>Leaderboard</h2>
+        <p>Top builders ranked by token usage across Claude Code and Codex</p>
+      </div>
+      <div className="unlock-leaderboard-grid">
+        <article className="unlock-leader-col">
+          <header><h3>Claude Code</h3></header>
+          {ccLeaders.map((r) => (
+            <div className="unlock-leader-row" key={`cc-${r.rank}`}>
+              <span className="leader-rank">{r.rank}</span>
+              <span className="leader-name">{r.mask}</span>
+              <em className="leader-tier">{r.tier}</em>
+              <div className="leader-bar"><i className="bar-cc" style={{ width: `${r.barFill}%` }} /></div>
+              <em className="leader-tokens">{r.tokens} tokens</em>
             </div>
           ))}
         </article>
-      </section>
-
-      <section className="unlock-leadership-board">
-        <div>
-          <p className="eyebrow">Leadership board</p>
-          <h3>Visible leadership usage</h3>
-          <p>Leadership usage is treated as the adoption signal: people believe the change when executives show up on the board.</p>
-        </div>
-        <ol>
-          {usageLeaders.map(([name, role, tokens, tier], index) => (
-            <li key={name}>
-              <span>{String(index + 1).padStart(2, '0')}</span>
-              <strong>{name}</strong>
-              <small>{role}</small>
-              <em>{tokens}</em>
-              <b>{tier}</b>
-            </li>
-          ))}
-        </ol>
-      </section>
-    </div>
-  );
-}
-
-function HeroShell() {
-  return (
-    <section className="page-shell intro-shell">
-      <nav className="top-nav glass-nav">
-        <div className="brand-mark">✦ delight.ai</div>
-        <a href="#gtm">GTM Growth</a>
-        <a href="#buzzboard">Buzzboard</a>
-        <a href="#campaign-kit">Campaign Kit</a>
-        <a href="#scoreboard">Scoreboard</a>
-      </nav>
-      <div className="intro-grid">
-        <div>
-          <p className="eyebrow">Marketing Webpage Suite</p>
-          <h1>Campaign systems that look as sharp as the work they ship.</h1>
-          <p className="lede">A local prototype for the GTM Growth Command Center and Buzzboard employee amplification site, styled from the observed screenshots.</p>
-        </div>
-        <div className="mini-browser-card">
-          <div className="browser-dots"><span /><span /><span /></div>
-          <div className="mini-browser-line wide" />
-          <div className="mini-browser-line" />
-          <div className="mini-browser-tiles"><span /><span /><span /></div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function GtmCommandCenter() {
-  return (
-    <section className="browser-frame" id="gtm">
-      <nav className="top-nav product-nav">
-        <div className="brand-mark">✦ delight.ai</div>
-        <a href="#calendar">Integrated Marketing Plan</a>
-        <a href="#projects">Projects</a>
-        <a href="#mini-tools">Mini Tools</a>
-        <a href="#status">Status</a>
-      </nav>
-
-      <section className="gtm-hero">
-        <div>
-          <span className="soft-pill">AI Growth Projects</span>
-          <h2>GTM Growth <span>Command Center.</span> 🚀</h2>
-          <p>Experiments, ABM intelligence, and growth infrastructure in one dashboard.</p>
-        </div>
-        <a className="black-button" href="#projects">Explore projects →</a>
-      </section>
-
-      <section className="calendar-section" id="calendar">
-        <div className="section-heading inverted">
-          <span>Featured</span>
-          <div>
-            <h3>Integrated Marketing Plan</h3>
-            <p>The main project calendar tracking every integrated campaign across channels — podcast, direct mail, paid social, case study, and webinar.</p>
-          </div>
-          <button className="light-button">Open full plan ↗</button>
-        </div>
-        <MarketingTimeline />
-      </section>
-
-      <section className="projects-section" id="projects">
-        <p className="eyebrow">All Projects</p>
-        {projectGroups.map((group) => (
-          <ProjectGroupView key={group.title} group={group} />
-        ))}
-      </section>
-
-      <section className="harper-section" id="mini-tools">
-        <div className="section-heading inverted compact">
-          <span>05</span>
-          <div>
-            <h3>Harper — Inbound AI Agent</h3>
-            <p>Tools to optimise inbound agent behaviour, conversion analysis, widget performance, and business matching.</p>
-          </div>
-        </div>
-        <div className="harper-grid">
-          {harperCards.map((card) => <ProjectCardView key={card.title} card={card} large />)}
-        </div>
-      </section>
-
-      <section className="activation-strip" id="status">
-        <span>06</span>
-        <div>
-          <h3>Activation Campaigns</h3>
-          <p>Campaign-specific playbooks, activation plans, and LinkedIn ad scripts tied to live GTM launches.</p>
-        </div>
-        <button className="black-button">View launch assets →</button>
-      </section>
-    </section>
-  );
-}
-
-function MarketingTimeline() {
-  const rows = [
-    { name: 'AI Readiness 101', start: '8%', width: '28%', colour: 'slate' },
-    { name: 'T&H Summer Campaigns', start: '25%', width: '68%', colour: 'blue' },
-    { name: 'CX Network — Sponsored Webinar', start: '25%', width: '22%', colour: 'amber' },
-    { name: 'State of CX Report', start: '15%', width: '51%', colour: 'purple' },
-  ];
-
-  return (
-    <div className="timeline-card">
-      <div className="timeline-toolbar">
-        <strong>Integrated Marketing Plan</strong>
-        <div><span>Calendar</span><span>List</span><span>Message Map</span><span>Email Calendar</span></div>
-      </div>
-      <div className="timeline-months"><span>Mar 2026</span><span>Apr 2026</span><span>May 2026</span><span>Jun 2026</span><span>Jul 2026</span></div>
-      {rows.map((row) => (
-        <div className="timeline-row" key={row.name}>
-          <span>{row.name}</span>
-          <div className="timeline-track"><i className={`timeline-bar ${row.colour}`} style={{ left: row.start, width: row.width }} /></div>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function ProjectGroupView({ group }: { group: ProjectGroup }) {
-  return (
-    <section className="project-group">
-      <div className="project-title-row">
-        <span>{group.number}</span>
-        <div>
-          <h3>{group.title}</h3>
-          <p>{group.summary}</p>
-        </div>
-        <small>{group.cards.filter((card) => card.status === 'Live').length} live / {group.cards.length} total</small>
-      </div>
-      <div className="project-card-grid">
-        {group.cards.map((card) => <ProjectCardView key={card.title} card={card} />)}
-      </div>
-    </section>
-  );
-}
-
-function ProjectCardView({ card, large = false }: { card: ProjectCard; large?: boolean }) {
-  return (
-    <article className={`project-card ${large ? 'large' : ''}`}>
-      <div className={`project-thumb ${card.accent}`}>
-        <strong>{card.mockup}</strong>
-        <span className="mock-screen" />
-      </div>
-      <div className="card-body">
-        <span className={`status-pill ${card.status.toLowerCase()}`}>● {card.status}</span>
-        <h4>{card.title}</h4>
-        <p>{card.description}</p>
-        <div className="tag-row">{card.tags.map((tag) => <span key={tag}>{tag}</span>)}</div>
-      </div>
-    </article>
-  );
-}
-
-function Buzzboard({
-  selectedAsset,
-  setSelectedAsset,
-  selectedPost,
-  postTemplates,
-  setSelectedTemplate,
-  billboardSlogan,
-  setBillboardSlogan,
-  length,
-  setLength,
-  detail,
-  setDetail,
-  energy,
-  setEnergy,
-  customDirection,
-  setCustomDirection,
-  generatedPost,
-}: {
-  selectedAsset: number;
-  setSelectedAsset: (asset: number) => void;
-  selectedPost: PostTemplate;
-  postTemplates: PostTemplate[];
-  setSelectedTemplate: (template: string) => void;
-  billboardSlogan: string;
-  setBillboardSlogan: (value: string) => void;
-  length: number;
-  setLength: (value: number) => void;
-  detail: number;
-  setDetail: (value: number) => void;
-  energy: number;
-  setEnergy: (value: number) => void;
-  customDirection: string;
-  setCustomDirection: (value: string) => void;
-  generatedPost: string;
-}) {
-  return (
-    <section className="browser-frame buzzboard-frame" id="buzzboard">
-      <nav className="top-nav product-nav buzz-nav">
-        <div className="brand-mark">● Buzzboard</div>
-        <a href="#live-campaigns">Live Campaigns</a>
-        <a href="#past-campaigns">Past Campaigns</a>
-        <a href="#scoreboard">Scoreboard</a>
-      </nav>
-
-      <section className="buzz-hero">
-        <span className="soft-pill dark">BUZZBOARD</span>
-        <h2>Grab a post and get loud<br />on <span>LinkedIn</span></h2>
-        <div className="value-pills"><span>✓ Pick from curated campaigns</span><span>✓ AI-generated or ready-made posts</span><span>✓ Track your team's impact</span></div>
-      </section>
-
-      <section className="campaign-list" id="live-campaigns">
-        <p className="eyebrow">Live Campaigns</p>
-        <div className="campaign-grid">
-          {campaigns.map((campaign) => <CampaignCard key={campaign.title} campaign={campaign} />)}
-        </div>
-        <div className="past-campaigns" id="past-campaigns">
-          <p className="eyebrow">Past Campaigns</p>
-          {pastCampaigns.map((campaign) => <div key={campaign}><strong>{campaign}</strong><span>View archive ↗</span></div>)}
-        </div>
-      </section>
-
-      <section className="campaign-kit" id="campaign-kit">
-        <div className="kit-hero">
-          <span className="soft-pill dark">BUZZBOARD · EMPLOYEE AMPLIFICATION KIT</span>
-          <h2>{billboardSlogan}</h2>
-          <p>Pick your UniFocus magazine ad, tune the campaign line, and help hospitality teams see what faster operations can feel like.</p>
-          <button>UniFocus Magazine Ads <em>Phase I</em></button>
-        </div>
-
-        <section className="billboard-generator">
-          <div>
-            <p className="eyebrow">Magazine ad copy generator</p>
-            <h3>Make every portrait ad update from one campaign line.</h3>
-          </div>
-          <label>
-            Campaign headline
-            <input value={billboardSlogan} onChange={(event) => setBillboardSlogan(event.target.value)} />
-          </label>
-          <div className="slogan-chip-row">
-            {sloganIdeas.map((idea) => (
-              <button key={idea} onClick={() => setBillboardSlogan(idea)}>{idea}</button>
-            ))}
-          </div>
-        </section>
-
-        <section className="asset-section">
-          <p className="eyebrow">Magazine ads · portrait concepts</p>
-          <div className="asset-grid">
-            {assets.map((asset, index) => (
-              <button className={`asset-card ${selectedAsset === index ? 'selected' : ''}`} key={asset.label} onClick={() => setSelectedAsset(index)}>
-                <span className="real-badge">{asset.badge}</span>
-                <MagazineAd asset={asset} slogan={billboardSlogan} compact />
-                <small>{asset.label}</small>
-              </button>
-            ))}
-          </div>
-        </section>
-
-        <section className="composer-section">
-          <p className="eyebrow">Step 1 · Write your post</p>
-          <div className="composer-card">
-            <div className="selected-asset-preview"><MagazineAd asset={assets[selectedAsset]} slogan={billboardSlogan} /></div>
-            <div className="post-preview">
-              <div><p className="eyebrow">Your Post</p><button className="ghost-button">Change asset</button></div>
-              <pre>{selectedPost.body}</pre>
-              <button className="linkedin-button">in Post on LinkedIn</button>
+        <article className="unlock-leader-col">
+          <header><h3>Codex</h3></header>
+          {codexLeaders.map((r) => (
+            <div className="unlock-leader-row" key={`cx-${r.rank}`}>
+              <span className="leader-rank">{r.rank}</span>
+              <span className="leader-name">{r.mask}</span>
+              <em className="leader-tier">{r.tier}</em>
+              <div className="leader-bar"><i className="bar-codex" style={{ width: `${r.barFill}%` }} /></div>
+              <em className="leader-tokens">{r.tokens} tokens</em>
             </div>
-          </div>
-        </section>
-
-        <section className="template-section">
-          <p className="eyebrow">Ready to post · grab and go</p>
-          <div className="template-grid">
-            {postTemplates.map((template) => (
-              <button key={template.id} className={`template-card ${selectedPost.id === template.id ? 'selected' : ''}`} onClick={() => setSelectedTemplate(template.id)}>
-                <span>{template.tone}</span>
-                {template.recommended && <em>Recommended</em>}
-                <h4>{template.title}</h4>
-                <p>{template.body.slice(0, 146)}...</p>
-              </button>
-            ))}
-          </div>
-          <div className="selected-post-block">
-            <div><p className="eyebrow">Selected Post</p><button className="ghost-button">Copy</button></div>
-            <pre>{selectedPost.body}</pre>
-          </div>
-        </section>
-
-        <section className="generator-section">
-          <div className="tuning-panel">
-            <h3>Tune your post</h3>
-            <Slider label="Length" value={length} setValue={setLength} />
-            <Slider label="Detail" value={detail} setValue={setDetail} />
-            <Slider label="Energy" value={energy} setValue={setEnergy} />
-            <label className="direction-field">Custom direction<textarea value={customDirection} onChange={(event) => setCustomDirection(event.target.value)} /></label>
-          </div>
-          <div className="generated-panel">
-            <div><p className="eyebrow">Generated Post</p><button className="ghost-button">Copy</button></div>
-            <pre>{generatedPost}</pre>
-            <button className="linkedin-button">in Post on LinkedIn</button>
-          </div>
-        </section>
-      </section>
-
-      <section className="scoreboard" id="scoreboard">
-        <div>
-          <p className="eyebrow">Scoreboard</p>
-          <h3>All-Time Leaderboard</h3>
-          <p>Track your team's impact across campaigns, posts, and engagement.</p>
-        </div>
-        <ol>
-          <li><span>01</span><strong>Avery Chen</strong><em>208 pts</em></li>
-          <li><span>02</span><strong>Maya Patel</strong><em>130 pts</em></li>
-          <li><span>03</span><strong>Jordan Lee</strong><em>120 pts</em></li>
-        </ol>
-      </section>
-    </section>
-  );
-}
-
-function CampaignCard({ campaign }: { campaign: Campaign }) {
-  return (
-    <article className={`campaign-card ${campaign.status === 'Coming Soon' ? 'coming-soon' : ''}`}>
-      <span className={`status-pill ${campaign.status === 'Live' ? 'live' : 'planning'}`}>● {campaign.status}</span>
-      <h4>{campaign.title}</h4>
-      <p>{campaign.description}</p>
-      <small>{campaign.date}</small>
-      {campaign.status === 'Live' && <a href="#campaign-kit">Open kit →</a>}
-    </article>
-  );
-}
-
-function MagazineAd({
-  asset,
-  slogan,
-  compact = false,
-}: {
-  asset: BillboardAsset;
-  slogan: string;
-  compact?: boolean;
-}) {
-  const sceneClass = `magazine-ad ad-${asset.scene} ${compact ? 'compact' : 'hero-magazine-ad'}`;
-
-  return (
-    <div className={sceneClass} aria-label={`${asset.label} magazine ad preview`}>
-      <div className="magazine-photo">
-        <span className="window one" />
-        <span className="window two" />
-        <span className="window three" />
-        <span className="lobby-line" />
+          ))}
+        </article>
       </div>
-      <div className="magazine-copy">
-        <div className="unifocus-mark">UniFocus</div>
-        <strong>{slogan}</strong>
-        <p>AI-powered workforce and operations intelligence for hotels that cannot afford to slow down.</p>
-        <em>Hospitality operations, accelerated.</em>
-      </div>
-      <div className="magazine-footer"><span>WORKFORCE</span><span>FORECASTING</span><span>OPERATIONS</span></div>
-    </div>
+    </>
   );
 }
 
-function Slider({ label, value, setValue }: { label: string; value: number; setValue: (value: number) => void }) {
-  return (
-    <label className="slider-field">
-      <span>{label}</span>
-      <input type="range" min="0" max="100" value={value} onChange={(event) => setValue(Number(event.target.value))} />
-      <em>{value > 66 ? 'High' : value < 34 ? 'Low' : 'Medium'}</em>
-    </label>
-  );
-}
-
-export default App;
+export default UnlockProductApp;

@@ -8,6 +8,12 @@ source/
 frames/
 keyframes/
 ai_tier_frames/
+ai_usage_frames/
+customer_lookup_frames/
+guides_frames/
+quest_board_frames/
+quest_extra_frames/
+skills_frames/
 segment_1906_2046_frames/
 
 # Raw OCR frame dumps; summary markdown files are kept
