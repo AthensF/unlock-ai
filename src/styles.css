@@ -2280,3 +2280,14 @@ main.unlock-root { padding: 32px; min-height: 100vh; }
     grid-template-columns: 1fr;
   }
 }
+
+@media (max-width: 1100px) and (min-width: 769px) {
+  .unlock-guides-layout {
+    grid-template-columns: 220px 1fr;
+    gap: 18px;
+  }
+  .unlock-guides-toc { display: none; }
+  .unlock-guides-overview-grid {
+    grid-template-columns: 1fr;
+  }
+}

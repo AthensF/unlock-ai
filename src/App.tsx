@@ -387,7 +387,7 @@ const tierRows = [
   },
   {
     id: '05',
-    title: 'AI God',
+    title: 'Visionary',
     subtitle: 'the Multiplier',
     summary: 'Stopped building tools. Started building systems. The company moves differently because of what you ship.',
     tokens: '100M+',
@@ -428,26 +428,26 @@ const directReports: DirectReport[] = [
 
 type LeaderRow = { rank: number; mask: string; tier: string; tokens: string; barFill: number };
 const ccLeaders: LeaderRow[] = [
-  { rank: 4, mask: 'N**** ***', tier: 'AI God', tokens: '14.1B', barFill: 88 },
-  { rank: 5, mask: 'D***** ***', tier: 'AI God', tokens: '13.6B', barFill: 80 },
-  { rank: 6, mask: 'G**** *****', tier: 'AI God', tokens: '13.2B', barFill: 77 },
-  { rank: 7, mask: 'L**** ***', tier: 'AI God', tokens: '11.2B', barFill: 66 },
-  { rank: 8, mask: 'I**** ***', tier: 'AI God', tokens: '9.4B', barFill: 56 },
-  { rank: 9, mask: 'M*** ****', tier: 'AI God', tokens: '8.3B', barFill: 49 },
-  { rank: 10, mask: 'M****** ***', tier: 'AI God', tokens: '8.1B', barFill: 48 },
-  { rank: 11, mask: 'A****** ***', tier: 'AI God', tokens: '8.0B', barFill: 47 },
-  { rank: 12, mask: 'J***** ***', tier: 'AI God', tokens: '6.9B', barFill: 42 },
+  { rank: 4, mask: 'N**** ***', tier: 'Visionary', tokens: '14.1B', barFill: 88 },
+  { rank: 5, mask: 'D***** ***', tier: 'Visionary', tokens: '13.6B', barFill: 80 },
+  { rank: 6, mask: 'G**** *****', tier: 'Visionary', tokens: '13.2B', barFill: 77 },
+  { rank: 7, mask: 'L**** ***', tier: 'Visionary', tokens: '11.2B', barFill: 66 },
+  { rank: 8, mask: 'I**** ***', tier: 'Visionary', tokens: '9.4B', barFill: 56 },
+  { rank: 9, mask: 'M*** ****', tier: 'Visionary', tokens: '8.3B', barFill: 49 },
+  { rank: 10, mask: 'M****** ***', tier: 'Visionary', tokens: '8.1B', barFill: 48 },
+  { rank: 11, mask: 'A****** ***', tier: 'Visionary', tokens: '8.0B', barFill: 47 },
+  { rank: 12, mask: 'J***** ***', tier: 'Visionary', tokens: '6.9B', barFill: 42 },
 ];
 const codexLeaders: LeaderRow[] = [
-  { rank: 4, mask: 'L**** ***', tier: 'AI God', tokens: '10.8B', barFill: 90 },
-  { rank: 5, mask: 'N***** ***', tier: 'AI God', tokens: '10.7B', barFill: 89 },
-  { rank: 6, mask: 'M*** ****', tier: 'AI God', tokens: '7.8B', barFill: 65 },
-  { rank: 7, mask: 'J**** ****', tier: 'AI God', tokens: '5.7B', barFill: 47 },
-  { rank: 8, mask: 'D**** *****', tier: 'AI God', tokens: '5.4B', barFill: 45 },
-  { rank: 9, mask: 'A**** ***', tier: 'AI God', tokens: '5.0B', barFill: 42 },
-  { rank: 10, mask: 'D**** ***', tier: 'AI God', tokens: '4.4B', barFill: 37 },
-  { rank: 11, mask: 'I***** ******', tier: 'AI God', tokens: '4.1B', barFill: 34 },
-  { rank: 12, mask: 'J*** ****', tier: 'AI God', tokens: '4.0B', barFill: 33 },
+  { rank: 4, mask: 'L**** ***', tier: 'Visionary', tokens: '10.8B', barFill: 90 },
+  { rank: 5, mask: 'N***** ***', tier: 'Visionary', tokens: '10.7B', barFill: 89 },
+  { rank: 6, mask: 'M*** ****', tier: 'Visionary', tokens: '7.8B', barFill: 65 },
+  { rank: 7, mask: 'J**** ****', tier: 'Visionary', tokens: '5.7B', barFill: 47 },
+  { rank: 8, mask: 'D**** *****', tier: 'Visionary', tokens: '5.4B', barFill: 45 },
+  { rank: 9, mask: 'A**** ***', tier: 'Visionary', tokens: '5.0B', barFill: 42 },
+  { rank: 10, mask: 'D**** ***', tier: 'Visionary', tokens: '4.4B', barFill: 37 },
+  { rank: 11, mask: 'I***** ******', tier: 'Visionary', tokens: '4.1B', barFill: 34 },
+  { rank: 12, mask: 'J*** ****', tier: 'Visionary', tokens: '4.0B', barFill: 33 },
 ];
 
 // Daily token trend — 31 daily points Mar 24 (Wed) → Apr 23 (Fri).
