@@ -177,3 +177,29 @@ npm run build
 - Product implementation currently lives in `src/App.tsx` and `src/styles.css`.
 - Some legacy marketing/Buzzboard React components remain in `src/App.tsx`, but the rendered default app is now the `unlock.ai` product app.
 - Screenshot fidelity matters more than generic component styling.
+
+## Session Log — 2026-05-15
+
+Shipped responsive + content polish on `main` (commits `612d654`, `4c92563`, `4ceb2c6`).
+
+**Responsive system** (`src/App.tsx`, `src/styles.css`):
+- Removed the decorative EN/KO language toggle from the Quest Board header.
+- Added a hamburger button + slide-in drawer for the global sidebar under 768px, with a backdrop and auto-close on nav click. Sidebar state lives in `UnlockProductApp` as `sidebarOpen`.
+- Two responsive breakpoints in `src/styles.css`:
+  - `@media (max-width: 768px)` — phone: hamburger appears, multi-column grids collapse to 1 col (Quest Board, Skills/Plugin marketplace, Five Tiers expanded panel, AI Tiers arc/matrix, AI Usage KPI row, usage hero/panels/leadership board, Guides nav + overview). The "By Team" matrix keeps horizontal scroll inside its own container via `overflow-x: auto`.
+  - `@media (max-width: 1100px) and (min-width: 769px)` — tablet/small laptop: Guides drops the empty TOC rail and stacks overview cards 1-col.
+- Page-level horizontal overflow asserted to 0 via headless `browse` at 375 and 1000 viewports.
+
+**Content**:
+- Renamed Tier 05 "AI God" → "Visionary" across `src/App.tsx`: the Five Tiers data (`AiTiersFiveTiers`), the leadership board rows in AI Usage, and the uppercase column header `'VISIONARY · MULTIPLIER'` in the By Team matrix at line 1195. `grep -i god src/App.tsx` returns 0.
+
+**`.gitignore`**: added `.gstack/` and `.vercel`.
+
+**Verification tooling**: Used the gstack `browse` skill (`~/.claude/skills/gstack/browse/dist/browse`) to drive a headless Chromium against `npm run dev` at `http://localhost:5173/`. Useful one-liners:
+- `B="$HOME/.claude/skills/gstack/browse/dist/browse"` then `$B viewport 375x812`, `$B goto …`, `$B click ".unlock-hamburger"`, `$B screenshot --viewport /tmp/x.png`.
+- Tab triggers in AI Tiers don't have `.unlock-tabs` class; use `[...document.querySelectorAll('button')].find(b => /by team/i.test(b.textContent)).click()`.
+
+**Known follow-ups not addressed this session**:
+- Tab strips inside AI Tiers / AI Usage (`02 Organisational Arc`, `03 By Team`, `My Usage`, `My Team`) still horizontally clip on phone — pre-existing layout, low priority.
+- No proper tap-handler verification on backdrop close via Playwright (the click coordinate centered on the backdrop is occluded by the sidebar `z-index`); JS-dispatched click works and real-user taps on the right of the viewport will hit the backdrop. Functional, but worth a manual sanity-check on a real device.
+- A separate `Plan: Mobile layout pass for fixed-column grids` plan file existed mid-session; final state matches what shipped, but if you reopen the plan file at `/Users/athens/.claude/plans/great-two-things-1-gentle-emerson.md` it now reflects only the latest addendum (Visionary uppercase rename).
