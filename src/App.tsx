@@ -1192,7 +1192,7 @@ function TeamMatrix() {
     ['02', 'INTERMEDIATE · TODAY'],
     ['03', 'EXPERT · ARCHITECT'],
     ['04', 'CATALYST'],
-    ['05', 'AI GOD · MULTIPLIER'],
+    ['05', 'VISIONARY · MULTIPLIER'],
   ];
   const rows = [
     {
