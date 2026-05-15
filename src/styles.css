@@ -2176,3 +2176,107 @@ main.unlock-root { padding: 32px; min-height: 100vh; }
   overflow-wrap: anywhere;
 }
 .unlock-empty { color: #8a857c; font-style: italic; padding: 24px; }
+
+.unlock-hamburger { display: none; }
+
+@media (max-width: 768px) {
+  .unlock-shell {
+    grid-template-columns: 1fr;
+    position: relative;
+    border-radius: 0;
+    border-left: 0;
+    border-right: 0;
+  }
+  .unlock-hamburger {
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    position: fixed;
+    top: 16px;
+    left: 16px;
+    z-index: 50;
+    width: 44px;
+    height: 44px;
+    padding: 0 11px;
+    border: 1px solid #e2dfd8;
+    border-radius: 12px;
+    background: #fff;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(36, 24, 12, 0.08);
+  }
+  .unlock-hamburger span {
+    display: block;
+    height: 2px;
+    width: 100%;
+    background: #111;
+    border-radius: 2px;
+  }
+  .unlock-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 280px;
+    z-index: 60;
+    overflow-y: auto;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+    box-shadow: 0 16px 40px rgba(36, 24, 12, 0.18);
+  }
+  .unlock-sidebar.open { transform: translateX(0); }
+  .unlock-sidebar-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 55;
+    background: rgba(0, 0, 0, 0.4);
+  }
+  .unlock-canvas {
+    max-height: none;
+    padding-top: 68px;
+  }
+  .unlock-page { padding: 24px 18px; }
+  .unlock-page-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .unlock-page-header h1 { font-size: clamp(28px, 8vw, 40px); }
+  .unlock-filter-row { flex-wrap: wrap; }
+
+  .unlock-quest-grid,
+  .unlock-skill-grid,
+  .unlock-plugin-grid,
+  .unlock-arc-grid,
+  .unlock-matrix,
+  .unlock-usage-grid {
+    grid-template-columns: 1fr;
+  }
+  .unlock-tier-expanded {
+    grid-template-columns: 1fr;
+    padding: 0 18px 24px;
+  }
+  .unlock-usage-hero,
+  .unlock-usage-panels,
+  .unlock-leadership-board,
+  .unlock-kpi-row,
+  .unlock-usage-row {
+    grid-template-columns: 1fr;
+  }
+  .unlock-team-matrix {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    max-width: 100%;
+  }
+  .unlock-tier-summary {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 20px 0;
+  }
+  .unlock-guides-layout {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .unlock-guides-overview-grid {
+    grid-template-columns: 1fr;
+  }
+}

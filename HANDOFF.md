@@ -167,6 +167,10 @@ npm run build
 - **Repository**: `git@github.com:AthensF/unlock-ai.git`
 - This project directory may need Git initialisation before pushing if it is not already a repository.
 
+## Deployment
+
+- **Vercel URL**: https://unlock-dot-ai.vercel.app
+
 ## Notes for Next Agent
 
 - Do not modify `marketing-webpage-spec.md` unless explicitly instructed; another agent owns that work.

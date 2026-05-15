@@ -476,11 +476,21 @@ function UnlockProductApp() {
   const [questFilter, setQuestFilter] = useState<'active' | 'completed'>('active');
   const [tierTab, setTierTab] = useState<'tiers' | 'arc' | 'team'>('tiers');
   const [selectedQuest, setSelectedQuest] = useState<QuestRef>({ list: 'active', idx: 0 });
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
     <main className="unlock-root">
       <div className="unlock-shell">
-        <aside className="unlock-sidebar">
+        <button
+          type="button"
+          className="unlock-hamburger"
+          aria-label="Toggle navigation"
+          aria-expanded={sidebarOpen}
+          onClick={() => setSidebarOpen((v) => !v)}
+        >
+          <span /><span /><span />
+        </button>
+        <aside className={`unlock-sidebar${sidebarOpen ? ' open' : ''}`}>
           <div className="unlock-brand">
             <span>u</span>
             <strong>unlock.ai</strong>
@@ -488,7 +498,7 @@ function UnlockProductApp() {
           <p className="unlock-side-section">Navigation</p>
           <nav>
             {navItems.map((item) => (
-              <button key={item.id} className={activePage === item.id ? 'active' : ''} onClick={() => setActivePage(item.id)}>
+              <button key={item.id} className={activePage === item.id ? 'active' : ''} onClick={() => { setActivePage(item.id); setSidebarOpen(false); }}>
                 <i className="unlock-nav-dot" />
                 {item.label}
               </button>
@@ -507,6 +517,7 @@ function UnlockProductApp() {
             <strong>Athens</strong>
           </div>
         </aside>
+        {sidebarOpen && <div className="unlock-sidebar-backdrop" onClick={() => setSidebarOpen(false)} />}
         <section className="unlock-canvas">
           {activePage === 'quests' && <QuestBoard filter={questFilter} setFilter={setQuestFilter} openDetail={(ref) => { setSelectedQuest(ref); setActivePage('quest-detail'); }} />}
           {activePage === 'quest-detail' && <QuestDetail questRef={selectedQuest} backToBoard={() => setActivePage('quests')} />}
@@ -548,7 +559,6 @@ function QuestBoard({ filter, setFilter, openDetail }: { filter: 'active' | 'com
           <h1>Quest Board</h1>
           <p>Active automation challenges</p>
         </div>
-        <div className="unlock-language-toggle"><span className="active">EN</span><span>KO</span></div>
       </header>
       <div className="unlock-filter-row">
         <span className="unlock-filter-label">Tier:</span>

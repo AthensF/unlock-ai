@@ -19,3 +19,5 @@ segment_1906_2046_frames/
 # Raw OCR frame dumps; summary markdown files are kept
 ocr/
 segment_1906_2046_ocr/
+.gstack/
+.vercel
