@@ -33,11 +33,11 @@ type SkillCard = {
 };
 
 const navItems: { id: ProductPage; label: string }[] = [
-  { id: 'quests', label: 'Quest Board' },
   { id: 'usage', label: 'AI Usage' },
+  { id: 'tiers', label: 'AI Tiers' },
+  { id: 'quests', label: 'Quest Board' },
   { id: 'skills', label: 'Skills' },
   { id: 'guides', label: 'Guides' },
-  { id: 'tiers', label: 'AI Tiers' },
 ];
 
 const appItems: { label: string; href?: string }[] = [
@@ -195,8 +195,8 @@ const completedQuests: QuestCard[] = [
     ],
   },
   {
-    title: 'Internal Skill Publishing & Discovery Marketplace for Sendbird',
-    description: 'Currently, ~20 Sendbird employees are building skills on the Automators platform, but there is no...',
+    title: 'Internal Skill Publishing & Discovery Marketplace for Unifocus',
+    description: 'Currently, ~20 Unifocus employees are building skills on the Automators platform, but there is no...',
     kind: 'Epic',
     state: 'Completed',
     stripe: 'yellow',
@@ -206,18 +206,18 @@ const completedQuests: QuestCard[] = [
     verified: true,
     hero: 'plain',
     hrsSaved: '1.0 hrs/wk saved',
-    team: 'All Sendbird Employees',
+    team: 'All Unifocus Employees',
     risk: 'LOW',
     questGiver: { initial: 'I', mask: 'I***', color: '#e0533f' },
     buildersList: [{ initial: 'I', mask: 'I***', color: '#e0533f' }],
     body: [
-      "Currently, ~20 Sendbird employees are building skills on the Automators platform, but there is no centralized way to share, discover, or reuse them. Skills are siloed to the individual who built them, and the only way to share a skill today is informally — taking roughly 3 minutes per share and happening about once a week per person. There is no process, no catalog, and no visibility into what's already been built.",
-      "The goal of this quest is to build an internal skill marketplace on the Automators platform where any Sendbird employee can publish a skill they've built and any other employee can browse, discover, and use those skills — all authenticated via SSO. This removes the silo problem entirely and unlocks reuse across the company.",
+      "Currently, ~20 Unifocus employees are building skills on the Automators platform, but there is no centralized way to share, discover, or reuse them. Skills are siloed to the individual who built them, and the only way to share a skill today is informally — taking roughly 3 minutes per share and happening about once a week per person. There is no process, no catalog, and no visibility into what's already been built.",
+      "The goal of this quest is to build an internal skill marketplace on the Automators platform where any Unifocus employee can publish a skill they've built and any other employee can browse, discover, and use those skills — all authenticated via SSO. This removes the silo problem entirely and unlocks reuse across the company.",
       '**Follow-up Quests:**',
       '- Usage analytics dashboard showing how often each skill is being used',
       '- In-marketplace chat interface to interact with skills directly',
       '## Success Criteria',
-      "Any Sendbird employee can find and deploy a published skill in under 5 minutes, with no manual coordination with the skill's original author.",
+      "Any Unifocus employee can find and deploy a published skill in under 5 minutes, with no manual coordination with the skill's original author.",
       '## Follow-up Quests',
       '- Usage Analytics Quest — build a dashboard showing skill usage frequency, top skills, and adoption trends across the company',
       '- In-Marketplace Chat Quest — add a chat interface so employees can interact with and test skills before installing',
@@ -255,7 +255,7 @@ const completedQuests: QuestCard[] = [
   },
   {
     title: 'Full Automation of Monthly Operating Metrics Google Sheet Update',
-    description: "Each month, 3 people spend approximately 1 hour each updating Sendbird's Monthly Operating...",
+    description: "Each month, 3 people spend approximately 1 hour each updating Unifocus's Monthly Operating...",
     kind: 'Solid',
     state: 'Completed',
     stripe: 'amber',
@@ -264,8 +264,8 @@ const completedQuests: QuestCard[] = [
     builders: 1,
   },
   {
-    title: 'Delight AI Agent Feature Flag 자동 수집 · 메모리 시스템 구축',
-    description: '배경 및 문제: Delight AI Agent 팀(QE, FDT, PM, Client, Server 등 약 20-30명)은 feature flag의 현재 상태를 파...',
+    title: 'Delight AI Agent Feature Flag Auto-Collection & Memory System',
+    description: 'Background & problem: The Delight AI Agent team (QE, FDT, PM, Client, Server — about 20–30 people) needs a reliable way to track the current state of every feature flag, but...',
     kind: 'Epic',
     state: 'Completed',
     stripe: 'yellow',
@@ -298,7 +298,7 @@ const completedQuests: QuestCard[] = [
 type PluginCard = { name: string; description: string; badgeLetter: string; badgeColor: 'coral' | 'green' | 'violet' | 'amber'; skillCount: number };
 
 const pluginCards: PluginCard[] = [
-  { name: 'sales-skills', description: 'AI-powered sales skills for the Sendbird sales team', badgeLetter: 'S', badgeColor: 'coral', skillCount: 12 },
+  { name: 'sales-skills', description: 'AI-powered sales skills for the Unifocus sales team', badgeLetter: 'S', badgeColor: 'coral', skillCount: 12 },
   { name: 'vercel-dev-skills', description: 'AI-powered development skills for Vercel app teams — project setup, spec drafting, Linear tickets, PR shipping, and...', badgeLetter: 'V', badgeColor: 'coral', skillCount: 5 },
   { name: 'recruiting', description: 'AI-powered recruiting tools for sourcing, screening, and scheduling candidates', badgeLetter: 'R', badgeColor: 'green', skillCount: 8 },
   { name: 'customer-success', description: 'Customer health scoring, QBR prep, and renewal automation for CS teams', badgeLetter: 'C', badgeColor: 'green', skillCount: 12 },
@@ -328,7 +328,7 @@ const salesSkills: SalesSkill[] = [
 
 const meddpiccDescription = "When the user asks about MEDDPICC — including how it works, how to apply it to a deal, what questions to ask, whether a deal is qualified, how to find a champion, or how to validate any MEDDPICC element. Also triggers when the user pastes call notes or a transcript and asks for MEDDPICC analysis, or says 'review my deal', 'score my deal', or 'what am I missing in this deal'.";
 
-const meddpiccSkillMd = `You are SBSales MEDDPICC Master Advisor — Sendbird's deal qualification coach. You teach MEDDPICC, help reps apply it to live deals, validate whether criteria have been met, extract MEDDPICC elements from call transcripts, and guide reps on what to do next in each deal stage.
+const meddpiccSkillMd = `You are UFSales MEDDPICC Master Advisor — Unifocus's deal qualification coach. You teach MEDDPICC, help reps apply it to live deals, validate whether criteria have been met, extract MEDDPICC elements from call transcripts, and guide reps on what to do next in each deal stage.
 
 **Only give guidance based on MEDDPICC (the full 8-element version).** Do not reference MEDDIC or MEDDICC variants.
 
@@ -472,7 +472,7 @@ const codexTrend = [
 type QuestRef = { list: 'active' | 'completed'; idx: number };
 
 function UnlockProductApp() {
-  const [activePage, setActivePage] = useState<ProductPage>('quests');
+  const [activePage, setActivePage] = useState<ProductPage>('usage');
   const [questFilter, setQuestFilter] = useState<'active' | 'completed'>('active');
   const [tierTab, setTierTab] = useState<'tiers' | 'arc' | 'team'>('tiers');
   const [selectedQuest, setSelectedQuest] = useState<QuestRef>({ list: 'active', idx: 0 });
@@ -646,7 +646,7 @@ function QuestDetail({ questRef, backToBoard }: { questRef: QuestRef; backToBoar
             <footer className="unlock-qd-cta">
               <div>
                 <strong>🐝 Adam Flayman <span>— CSM coder bee</span></strong>
-                <p>Drafts PRD, TDD, and diagrams, then ships a PR on <code>sendbird-ai/csm-workspace</code>. You approve each step.</p>
+                <p>Drafts PRD, TDD, and diagrams, then ships a PR on <code>unifocus-ai/csm-workspace</code>. You approve each step.</p>
               </div>
               <button className="unlock-primary-button unlock-build-with"><span>🐝</span> Build with Adam Flayman <em>→</em></button>
             </footer>
@@ -777,7 +777,7 @@ function PluginDetail({ backToSkills, openSkill }: { backToSkills: () => void; o
     <div className="unlock-page unlock-plugin-page">
       <button className="unlock-back-link" onClick={backToSkills}>← Back to Skills</button>
       <h1 className="unlock-plugin-title">sales-skills</h1>
-      <p className="unlock-plugin-sub">AI-powered sales skills for the Sendbird sales team</p>
+      <p className="unlock-plugin-sub">AI-powered sales skills for the Unifocus sales team</p>
       <p className="unlock-plugin-path">/sales-skills</p>
 
       <div className="unlock-plugin-tabs">
@@ -892,7 +892,7 @@ function GuidesPage() {
     { title: 'App Development', desc: 'Guides for building apps, automations, and integrations.', count: 6 },
     { title: 'Vercel', desc: 'Guides for deploying, configuring, and sharing apps on the [Vercel platform](https://vercel.com/docs).', count: 6 },
     { title: 'n8n', desc: 'Guides for using n8n workflow automation with our tools and AI assistants.', count: 1 },
-    { title: 'CI Checks', desc: "Org-wide CI checks that run automatically on every PR across all `sendbird-ai` repos. No per-repo setup required.", count: 1 },
+    { title: 'CI Checks', desc: "Org-wide CI checks that run automatically on every PR across all `unifocus-ai` repos. No per-repo setup required.", count: 1 },
     { title: 'Automators Platform', desc: "Everything you need to know about using The Automator's Guild — the RPG-style platform where employees post...", count: 3 },
   ];
 
